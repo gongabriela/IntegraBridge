@@ -30,3 +30,5 @@ yarn-error.log*
 # arquivos pessoais
 
 implementacao.md
+auth-and-routes.md
+initial-setup-guide.md
