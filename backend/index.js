@@ -38,6 +38,24 @@ app.get('/api/pedidos', verificarToken, async (req, res) => {
   }
 });
 
+app.get('/api/pedidos/:id', verificarToken, async (req, res) => {
+  try {
+    const pedidoId = req.params.id;
+    const { data, error } = await supabase
+      .from('pedidos_ajuda')
+      .select('*')
+      .eq('id', pedidoId)
+      .single();
+    if (error) {
+      return res.status(404).json({ erro: 'Pedido de ajuda não encontrado.' });
+    }
+    res.json(data);
+  } catch (erroInesperado) {
+    console.error("Erro no GET /pedidos/:id:", erroInesperado);
+    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+  }
+});
+
 app.post('/api/pedidos', verificarToken, async (req, res) => {
   try {
     const { titulo, descricao, idioma, urgencia, distrito } = req.body;
