@@ -9,7 +9,6 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(verificarToken);
 app.use(express.json());
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -66,9 +65,22 @@ app.post('/api/pedidos', verificarToken, async (req, res) => {
   }
 });
 
-// Iniciar o Servidor
-const port = process.env.PORT || 3000;
+// APAGAR (codigo): Fazer Login para obter o Token (A Pulseira VIP)
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
 
+  if (error) {
+    return res.status(400).json({ erro: error.message });
+  }
+  res.json({ token: data.session.access_token });
+});
+// Iniciar o Servidor
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor a correr na porta ${port}`);
 });
