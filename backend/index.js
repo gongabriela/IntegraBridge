@@ -56,6 +56,60 @@ app.get('/api/pedidos/:id', verificarToken, async (req, res) => {
   }
 });
 
+app.delete('/api/pedidos/:id', verificarToken, async (req, res) => {
+  try {
+    const pedidoId = req.params.id;
+    const donoId = req.user.id;
+    const { data, error } = await supabase
+      .from('pedidos_ajuda')
+      .delete()
+      .eq('id', pedidoId)
+      .eq('user_id', donoId)
+      .select();
+    if (error) {
+      return res.status(400).json({ erro: error.message });
+    }
+    if (data.length === 0) {
+      return res.status(403).json({ erro: 'Acesso negado: Não és o dono deste pedido ou ele já não existe.' });
+    }
+    res.json({ mensagem: 'Pedido de ajuda apagado com sucesso!' });
+  } catch (erroInesperado) {
+    console.error("Erro no DELETE /pedidos/:id:", erroInesperado);
+    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+  }
+});
+
+app.put('/api/pedidos/:id', verificarToken, async (req, res) => {
+  try {
+    const pedidoId = req.params.id;
+    const donoId = req.user.id;
+    const { titulo, descricao, idioma, urgencia, distrito, status } = req.body;
+    const { data, error } = await supabase
+      .from('pedidos_ajuda')
+      .update({
+        titulo: titulo,
+        descricao: descricao,
+        idioma: idioma,
+        urgencia: urgencia,
+        distrito: distrito,
+        status: status
+      })
+      .eq('id', pedidoId)
+      .eq('user_id', donoId)
+      .select();
+    if (error) {
+      return res.status(400).json({ erro: error.message });
+    }
+    if (data.length === 0) {
+      return res.status(403).json({ erro: 'Acesso negado: Não és o dono deste pedido ou ele já não existe.' });
+    }
+    res.json(data[0]);
+  } catch (erroInesperado) {
+    console.error("Erro no PUT /pedidos/:id:", erroInesperado);
+    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+  }
+});
+
 app.post('/api/pedidos', verificarToken, async (req, res) => {
   try {
     const { titulo, descricao, idioma, urgencia, distrito } = req.body;
