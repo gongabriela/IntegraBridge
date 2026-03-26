@@ -6,23 +6,23 @@
             <p>{{ isLoginMode ? 'Aceda à sua conta para continuar' : 'Crie a sua conta para ajudar ou pedir ajuda' }}</p>
         </div>
         
-        <form class="auth-form-container">
+        <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="auth-form-container">
             @if (!isLoginMode) {
                 <div class="form-group">
                     <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" placeholder="O teu nome" class="input-field">
+                    <input type="text" id="nome" formControlName="nome" placeholder="O teu nome" class="input-field">
                 </div>
             }
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Digite seu email" class="input-field" />
+                <input type="email" id="email" formControlName="email" placeholder="Digite seu email" class="input-field" />
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha" class="input-field" />
+                <input type="password" id="password" formControlName="password" placeholder="Digite sua senha" class="input-field" />
             </div>
             
-            <button type="button" class="button-primary full-width">
+            <button type="submit" class="button-primary full-width" [disabled]="authForm.invalid">
                 {{ isLoginMode ? 'Entrar' : 'Criar Conta' }}
             </button>
         </form>
@@ -33,6 +33,7 @@
                 <button class="link-button" (click)="toggleMode()">
                     {{ isLoginMode ? 'Registe-se' : 'Faça login' }}
                 </button>
-            </p> </div>
+            </p>
+        </div>
     </div>
 </div>
