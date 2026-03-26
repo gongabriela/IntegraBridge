@@ -1,118 +1,102 @@
-# IntegraBridge
+# IntegraBridge - API Backend
 
 Bem-vindo ao repositório Backend do **IntegraBridge**, uma plataforma desenvolvida para conectar Recém-Chegados a Portugal com Buddies (voluntários locais) dispostos a ajudar.
 
-Este projeto foca-se na construção de uma **API RESTful** completa com operações CRUD, autenticação segura e integração com uma base de dados relacional na nuvem.
+Este projeto foca-se na construção de uma API RESTful com operações CRUD, autenticação e integração com uma base de dados relacional na nuvem.
 
 ## Disclaimer
 
-Este repositório é um projeto que encontra-se em andamento!
+Este repositório é um projeto que se encontra em andamento.
 
 ---
 
-## 🚀 Arquitetura e Tecnologias Utilizadas
+## Arquitetura e Tecnologias Utilizadas
 
-A infraestrutura foi desenhada seguindo as melhores práticas de Engenharia de Software, separando as responsabilidades entre Servidor, Segurança e Base de Dados.
-
-* **Servidor (Node.js & Express.js):** Gestão de rotas da API e ciclo de Request-Response HTTP.
-* **Base de Dados Relacional (Supabase / PostgreSQL):** Armazenamento de utilizadores e pedidos de ajuda.
-* **Segurança de Rotas (Middlewares & JWT):** Implementação de um middleware customizado (`auth.js`) que interceta pedidos HTTP e valida Tokens JWT (formato Bearer) gerados pelo Supabase Auth.
-* **Segurança de Dados (RLS - Row Level Security):** Políticas configuradas diretamente no PostgreSQL para garantir a autorização a nível de linha (ex: impedir que um utilizador apague o pedido de outro).
-* **Deploy e CI/CD (Render & GitHub Actions):** O projeto está configurado com Continuous Deployment nativo. Qualquer *merge* na branch `main` despoleta um *build* automático no **Render.com**, onde o servidor está alojado publicamente.
-
----
-
-## 🗄️ Modelo Relacional da Base de Dados
-
-A base de dados PostgreSQL utiliza uma relação de **1:N (Um para Muitos)**, onde um utilizador autenticado pode ser dono de vários pedidos de ajuda.
+O projeto está organizado em diferentes pastas para separar as responsabilidades do código, facilitando a leitura e a manutenção:
 
 ```text
-[ Tabela: auth.users ] (Gerida pelo Supabase)
+/backend
+ ├── /config             # Ficheiro de conexão à base de dados (Supabase)
+ ├── /controllers        # Lógica do sistema e comunicação com a base de dados
+ ├── /middleware         # Interceção de pedidos (ex: verificação do Token JWT)
+ ├── /routes             # Mapeamento dos URLs (endpoints) para os controladores
+ └── index.js            # Ficheiro principal que inicia o servidor Express
+```
+
+**Tecnologias Base:** Node.js, Express.js, Supabase (PostgreSQL), Render (para alojamento) e GitHub Actions (para CI/CD).
+
+---
+
+## Modelo Relacional da Base de Dados
+
+A base de dados PostgreSQL foi estruturada utilizando chaves estrangeiras para relacionar tabelas e ENUMs para limitar as opções de alguns campos.
+
+* **Tabelas Principais:** `auth.users` (gerida pelo Supabase) e `pedidos_ajuda`.
+* **Tabelas de Domínio:** `distritos` e `idiomas`.
+* **Segurança (RLS):** Foram criadas políticas (Row Level Security) diretamente no PostgreSQL para que apenas o utilizador criador de um pedido o possa editar ou apagar.
+
+```text
+[ Tabela: auth.users ]
 PK | id (UUID)
-   | email (VARCHAR)
 
-             | (1)
-             | Relacionamento (Garantido por Foreign Key e RLS)
-             | (N)
-             v
-
+           | (1)
+           | (N)
+           v
 [ Tabela: pedidos_ajuda ]
 PK | id (UUID)
-FK | user_id (UUID)  --> Liga ao auth.users
-   | titulo, descricao, idioma, urgencia, distrito, status
+FK | user_id (UUID)      -> Liga a auth.users(id)
+FK | distrito_id (INT)   -> Liga a distritos(id)
+FK | idioma_id (INT)     -> Liga a idiomas(id)
+   | titulo (VARCHAR 100)
+   | descricao (TEXT)
+   | status (ENUM: pendente, em_progresso, concluido)
+   | urgencia (ENUM: baixa, media, alta)
+   | created_at (TIMESTAMP)
 ```
 
 ---
 
-## 🌐 Acesso em Produção (Render)
+## Acesso em Produção
 
-A API está a correr em tempo real na nuvem através do Render.
-**URL Base de Produção:** `https://integrabridge-api.onrender.com/`
-
----
-
-## ⚙️ Como correr o projeto localmente
-
-1. **Clonar o repositório:**
-   ```bash
-   git clone https://github.com/gongabriela/IntegraBridge.git
-   cd IntegraBridge/backend
-   ```
-
-2. **Instalar as dependências:**
-   ```bash
-   npm install
-   ```
-
-3. **Configurar as Variáveis de Ambiente:**
-   Crie um ficheiro `.env` na raiz da pasta `backend` com as credenciais do seu projeto Supabase:
-   ```env
-   PORT=3000
-   SUPABASE_URL=https://<seu-projeto>.supabase.co
-   SUPABASE_KEY=<sua-chave-anon-publica>
-   ```
-
-4. **Iniciar o Servidor Local:**
-   ```bash
-   node index.js
-   # O servidor iniciará em http://localhost:3000
-   ```
+A API está alojada no Render.
+**URL Base:** `https://integrabridge-api.onrender.com`
 
 ---
 
-## 🔌 Documentação da API (Endpoints)
+## Documentação da API (Endpoints)
 
-Todas as rotas (exceto a de teste na raiz `/`) são **Protegidas**. É estritamente obrigatório enviar o Token JWT no cabeçalho do pedido HTTP:
+Todas as rotas (exceto `/` e `/api/login`) são protegidas. É necessário enviar o Token JWT no cabeçalho do pedido HTTP:
 `Authorization: Bearer <SEU_TOKEN_JWT>`
 
-### 1. Ler Pedidos (GET)
-* **Listar todos os pedidos:** `GET /api/pedidos`
-  * Retorna uma lista de pedidos ordenados do mais recente para o mais antigo.
-* **Detalhe de um pedido específico:** `GET /api/pedidos/:id`
-  * Utiliza parâmetros de rota para devolver apenas o objeto JSON correspondente ao `UUID` solicitado.
+### 1. Autenticação
+* **Rota:** `POST /api/login`
+* **Descrição:** Rota temporária para autenticar um utilizador e obter o Token JWT para testes.
 
-### 2. Criar Pedido (POST)
+### 2. Ler Pedidos (GET)
+* **Listar todos os pedidos:** `GET /api/pedidos`
+  * Retorna uma lista de pedidos ordenados do mais recente para o mais antigo, incluindo os nomes das tabelas relacionadas (idiomas e distritos).
+* **Detalhe de um pedido específico:** `GET /api/pedidos/:id`
+  * Devolve apenas o objeto JSON correspondente ao `id` solicitado.
+
+### 3. Criar Pedido (POST)
 * **Rota:** `POST /api/pedidos`
 * **Corpo do Pedido (JSON):**
   ```json
   {
     "titulo": "Preciso de ajuda com Finanças",
     "descricao": "Não percebo como preencher o IRS em Portugal.",
-    "idioma": "Português",
-    "urgencia": "Alta",
-    "distrito": "Porto"
+    "idioma_id": 1,
+    "urgencia": "alta",
+    "distrito_id": 13
   }
   ```
-  *(O `user_id` é injetado automaticamente pelo backend através do token decodificado).*
+  *(O `user_id` é registado automaticamente pelo backend através do token).*
 
-### 3. Atualizar Pedido (PUT)
+### 4. Atualizar Pedido (PUT)
 * **Rota:** `PUT /api/pedidos/:id`
-* **Segurança:** Apenas o dono do pedido (validado via RLS e middleware) o pode editar.
-* **Corpo do Pedido (JSON):** Deve conter os dados a atualizar (incluindo a possibilidade de alterar o `status` para 'resolvido').
+* **Segurança:** Apenas o dono do pedido o pode editar.
+* **Corpo do Pedido (JSON):** Deve conter os dados a atualizar, incluindo a chave `status`.
 
-### 4. Apagar Pedido (DELETE)
+### 5. Apagar Pedido (DELETE)
 * **Rota:** `DELETE /api/pedidos/:id`
-* **Segurança:** Dupla validação (JWT no Node.js + RLS no PostgreSQL). Retorna um erro `403 Forbidden` se o utilizador tentar apagar um pedido de outro utilizador.
-
----
-*Desenvolvido no âmbito do módulo de laboratórios práticos do programa UPskill ServiceNow.*
+* **Segurança:** Apenas o dono do pedido o pode apagar. Retorna erro de acesso negado caso contrário.
