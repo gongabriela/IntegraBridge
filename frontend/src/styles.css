@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Common Tokens */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Status Colors (Shared) */
+  --status-pending: #f59e0b;
+  --status-in-progress: #0ea5e9;
+  --status-completed: #10b981;
+  --status-urgent: #ef4444;
+  --status-error: #ef4444;
+  --category-pink: #ff95d6;
+
+  /* LIGHT MODE PALETTE (Default) */
+  --bg-main: #f8fafc;
+  --bg-surface: #ffffff;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --action-primary: #2563eb;
+  --action-text: #ffffff;
+}
+
+/* DARK MODE PALETTE */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #0f172a;
+    --bg-surface: #1e293b;
+    --border-subtle: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --action-primary: #3b82f6;
+    --action-text: #ffffff;
+  }
+}
+
+/* Global Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+/* Example Component Usage */
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.button-primary {
+  background-color: var(--action-primary);
+  color: var(--action-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.input-error {
+  border-color: var(--status-error);
+}
