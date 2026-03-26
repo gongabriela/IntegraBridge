@@ -67,6 +67,22 @@ label { font-size: 0.85rem; font-weight: 600; }
 
 .link-button:hover { text-decoration: underline; }
 
+.error-text {
+  color: var(--status-error);
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: -0.1rem;
+}
+
+.input-field.ng-invalid.ng-touched {
+  border-color: var(--status-error);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .auth-container {
     padding: 1rem;
