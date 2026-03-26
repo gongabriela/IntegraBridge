@@ -24,16 +24,18 @@ app.get('/api/pedidos', verificarToken, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('pedidos_ajuda')
-      .select('*')
+      .select(`
+        *,
+        distritos ( nome ),
+        idiomas ( nome )
+      `)
       .order('created_at', { ascending: false });
 
     if (error) {
       return res.status(400).json({ erro: error.message });
     }
-    
     res.json(data);
   } catch (erroInesperado) {
-    console.error("Erro no GET /pedidos:", erroInesperado);
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 });
@@ -43,15 +45,19 @@ app.get('/api/pedidos/:id', verificarToken, async (req, res) => {
     const pedidoId = req.params.id;
     const { data, error } = await supabase
       .from('pedidos_ajuda')
-      .select('*')
+      .select(`
+        *,
+        distritos ( nome ),
+        idiomas ( nome )
+      `)
       .eq('id', pedidoId)
       .single();
+
     if (error) {
       return res.status(404).json({ erro: 'Pedido de ajuda não encontrado.' });
     }
     res.json(data);
   } catch (erroInesperado) {
-    console.error("Erro no GET /pedidos/:id:", erroInesperado);
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 });
@@ -83,56 +89,59 @@ app.put('/api/pedidos/:id', verificarToken, async (req, res) => {
   try {
     const pedidoId = req.params.id;
     const donoId = req.user.id;
-    const { titulo, descricao, idioma, urgencia, distrito, status } = req.body;
+    
+    const { titulo, descricao, idioma_id, urgencia, distrito_id, status } = req.body;
+
     const { data, error } = await supabase
       .from('pedidos_ajuda')
       .update({
         titulo: titulo,
         descricao: descricao,
-        idioma: idioma,
+        idioma_id: idioma_id,
         urgencia: urgencia,
-        distrito: distrito,
+        distrito_id: distrito_id,
         status: status
       })
       .eq('id', pedidoId)
       .eq('user_id', donoId)
       .select();
+
     if (error) {
       return res.status(400).json({ erro: error.message });
     }
+
     if (data.length === 0) {
       return res.status(403).json({ erro: 'Acesso negado: Não és o dono deste pedido ou ele já não existe.' });
     }
     res.json(data[0]);
   } catch (erroInesperado) {
-    console.error("Erro no PUT /pedidos/:id:", erroInesperado);
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 });
 
 app.post('/api/pedidos', verificarToken, async (req, res) => {
   try {
-    const { titulo, descricao, idioma, urgencia, distrito } = req.body;
-
+    const { titulo, descricao, idioma_id, urgencia, distrito_id } = req.body;
+    
     const { data, error } = await supabase
       .from('pedidos_ajuda')
-      .insert([{
-        user_id: req.user.id, 
-        titulo: titulo,
-        descricao: descricao,
-        idioma: idioma,
-        urgencia: urgencia,
-        distrito: distrito
-      }])
-      .select(); 
+      .insert([
+        {
+          user_id: req.user.id, 
+          titulo: titulo,
+          descricao: descricao,
+          idioma_id: idioma_id,
+          urgencia: urgencia,
+          distrito_id: distrito_id
+        }
+      ])
+      .select();
 
     if (error) {
       return res.status(400).json({ erro: error.message });
     }
-    
     res.status(201).json(data[0]);
   } catch (erroInesperado) {
-    console.error("Erro no POST /pedidos:", erroInesperado);
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 });
