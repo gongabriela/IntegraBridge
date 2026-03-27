@@ -27,6 +27,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+#environment
+
+environments/
+
 # arquivos pessoais
 
 implementacao.md
@@ -35,3 +39,5 @@ initial-setup-guide.md
 update-delete-routes.md
 entrega-tp1.md
 entrega-TP1/
+docs/
+
