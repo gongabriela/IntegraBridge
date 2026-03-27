@@ -13,6 +13,12 @@ export class Dashboard {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  isSidebarOpen = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+  
   async sair() {
     await this.authService.logout();
     this.router.navigate(['/login']);
