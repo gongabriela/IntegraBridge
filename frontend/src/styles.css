@@ -63,6 +63,8 @@ h1, h2, h3, h4 {
   padding: 1.5rem;
 }
 
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
 .button-primary {
   background-color: var(--action-primary);
   color: var(--action-text);
