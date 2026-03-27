@@ -56,19 +56,20 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
 
       } else {
-        // Montamos o Payload de Registo
         const registerData: Registrar = {
           email: this.authForm.value.email ?? '',
           password: this.authForm.value.password ?? '',
           nome: this.authForm.value.nome ?? ''
         };
-
-        const { error } = await this.authService.registar(registerData);
+        const { data, error } = await this.authService.registar(registerData);
         if (error) throw error;
-        
-        alert('Conta criada com sucesso! Já podes fazer login.');
+        if (data.user && data.user.identities && data.user.identities.length === 0) {
+          throw new Error('Este email já se encontra registado na plataforma.');
+        }
+        alert('Conta criada com sucesso! Verifica o teu email ou faz login.');
         this.toggleMode();
       }
+    
     } catch (error: unknown) { 
       if (error instanceof Error || (error as AuthError).message) {
         alert('Erro: ' + (error as AuthError).message);
