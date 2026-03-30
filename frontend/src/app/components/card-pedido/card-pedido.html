@@ -3,14 +3,14 @@
     <span class="status-badge" [class]="dados.status">
       {{ dados.status === 'em_progresso' ? 'Em Progresso' : (dados.status | titlecase) }}
     </span>
-    <span class="request-id">REQ-{{ dados.id | slice:0:6 | uppercase }}</span>
+    <span class="request-id">REQ-{{ dados.id.substring(0, 6) | uppercase }}</span>
   </div>
 
   <h4 class="card-title">{{ dados.titulo }}</h4>
   
   <div class="tags-row">
-    <span class="tag">{{ dados.idiomas?.nome || 'N/A' }}</span>
-    <span class="tag">{{ dados.distritos?.nome || 'N/A' }}</span>
+    <span class="tag">{{ dados.idiomas.nome }}</span>
+    <span class="tag">{{ dados.distritos.nome }}</span>
   </div>
 
   <p class="card-desc">{{ dados.descricao }}</p>

@@ -36,12 +36,23 @@
 
     <div class="requests-grid">
         <div class="create-card">
-            <div class="plus-icon">+</div>
-            <span>Create New Request</span>
+            <div class="plus-icon">
+                <svg>...</svg>
+            </div>
+            <h4>Create New Request</h4>
+            <p>Start a new assistance or document request</p>
         </div>
 
         @for (pedido of meusPedidos; track pedido.id) {
+
         <app-card-pedido [dados]="pedido"></app-card-pedido>
+
+        } @empty {
+
+        <p style="color: var(--text-secondary); padding: 2rem;">
+            Ainda não tens nenhum pedido. Clica no botão ao lado para criar um!
+        </p>
+
         }
     </div>
 </div>
