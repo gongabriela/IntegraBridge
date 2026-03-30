@@ -3,6 +3,16 @@
 export type PedidoStatus = 'pendente' | 'em_progresso' | 'concluido';
 export type PedidoUrgencia = 'baixa' | 'media' | 'alta';
 
+export interface IDistrito {
+  id: number;
+  nome: string;
+}
+
+export interface IIdioma {
+  id: number;
+  nome: string;
+}
+
 /**
  * 1. Interface para Criação (DTO)
  * Usamos o Pick para "escolher" apenas os campos que o formulário preenche.
