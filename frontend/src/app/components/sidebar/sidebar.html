@@ -1,0 +1,27 @@
+@if (isOpen) {
+  <div class="sidebar-backdrop" (click)="close.emit()"></div>
+}
+
+<aside class="sidebar" [class.open]="isOpen">
+  <div class="logo-container">
+    <h2>IntegraBridge</h2>
+  </div>
+
+  <div class="sidebar-profile">
+    <div class="avatar">G</div>
+    <div class="profile-info">
+      <span class="profile-name">Gabriela</span>
+      <span class="profile-email">admin&#64;integrabridge.pt</span>
+    </div>
+  </div>
+
+  <nav class="nav-menu">
+    <a class="nav-item active">Dashboard</a>
+    <a class="nav-item">Meus Pedidos</a>
+    <a class="nav-item">Configurações</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="sair()">Sair da Conta</button>
+  </div>
+</aside>
