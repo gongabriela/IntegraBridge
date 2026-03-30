@@ -1,9 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.css'
 })
-export class Navbar {}
+export class NavbarComponent {
+  // APAGAR COMENTARIO A página pai vai poder injetar estes textos! Definimos valores por defeito:
+  @Input() title = 'IntegraBridge';
+  @Input() description = '';
+
+  // APAGAR COMENTARIO O megafone para avisar que o menu mobile deve abrir
+  @Output() toggleSidebar = new EventEmitter<void>();
+}

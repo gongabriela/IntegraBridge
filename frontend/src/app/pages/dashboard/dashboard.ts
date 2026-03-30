@@ -11,8 +11,6 @@ import { IPedido } from '../../models/pedido.model';
 })
 export class Dashboard {
 
-  isSidebarOpen = false;
-
   meusPedidos: IPedido[] = [
     {
       id: '1',
@@ -40,7 +38,4 @@ export class Dashboard {
     }
   ];
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
 }
