@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CardPedidoComponent } from '../../components/card-pedido/card-pedido';
-import { IPedido } from '../../models/pedido.model';
-
+import { IPedido, PedidoStatus, PedidoUrgencia } from '../../models/pedido.model';
+import { PedidoService } from '../../services/pedido';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -9,33 +9,21 @@ import { IPedido } from '../../models/pedido.model';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard {
 
-  meusPedidos: IPedido[] = [
-    {
-      id: '1',
-      titulo: 'Legal Aid for Refugee Family',
-      descricao: 'Assistance required for documentation and residency permits for a family of four.',
-      status: 'urgent',
-      categoria: 'Legal Aid',
-      data: '2 hours ago'
-    },
-    {
-      id: '2',
-      titulo: 'Emergency Housing - Unit 4B',
-      descricao: 'Immediate relocation needed due to structural damage in the current facility.',
-      status: 'pending',
-      categoria: 'Housing',
-      data: '5 hours ago'
-    },
-    {
-      id: '3',
-      titulo: 'Medical Supply Distribution',
-      descricao: 'Coordination of essential medicines for the community center in the south zone.',
-      status: 'in-progress',
-      categoria: 'Healthcare',
-      data: '1 day ago'
-    }
-  ];
+export class Dashboard implements OnInit {
 
+  private pedidoService = inject(PedidoService);
+  meusPedidos: IPedido[] = [];
+
+  ngOnInit(): void {
+    this.pedidoService.obterPedidos().subscribe({
+      next: (dados) => {
+        this.meusPedidos = dados;
+        console.log('Pedidos obtidos:', this.meusPedidos);
+      },
+      error: (erro) => {
+        console.error('Erro ao obter pedidos:', erro);
+      }
+    });
+  }
 }

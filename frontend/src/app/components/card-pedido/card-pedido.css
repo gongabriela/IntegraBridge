@@ -32,17 +32,17 @@
 }
 
 /* Cores dinâmicas para os Status (ligadas ao styles.css) */
-.status-badge.pending {
+.status-badge.pendente {
   background-color: rgba(245, 158, 11, 0.15);
   color: var(--status-pending);
 }
-.status-badge.in-progress {
+.status-badge.em_progresso {
   background-color: rgba(14, 165, 233, 0.15);
   color: var(--status-in-progress);
 }
-.status-badge.urgent {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: var(--status-urgent);
+.status-badge.concluido {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--status-completed);
 }
 
 .request-id {
