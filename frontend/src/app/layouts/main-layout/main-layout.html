@@ -1,1 +1,23 @@
-<p>main-layout works!</p>
+<div class="dashboard-layout">
+  
+  <app-sidebar 
+    [isOpen]="isSidebarOpen" 
+    (close)="toggleSidebar()">
+  </app-sidebar>
+
+  <main class="main-content">
+    
+    <app-navbar 
+      (toggleSidebar)="toggleSidebar()"
+      title="Overview de Pedidos"
+      description="Acompanhe e gira os pedidos de ajuda da comunidade em tempo real.">
+    </app-navbar>
+    
+    <section class="dashboard-body">
+      <router-outlet></router-outlet>
+    </section>
+
+    <app-footer></app-footer>
+
+  </main>
+</div>

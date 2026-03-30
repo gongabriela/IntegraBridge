@@ -1,0 +1,31 @@
+/* O contentor de ecrã inteiro */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-main);
+}
+
+/* A área à direita da sidebar */
+.main-content {
+  flex-grow: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  
+  /* Flexbox para gerir a Navbar, o Corpo e o Footer */
+  display: flex;
+  flex-direction: column;
+}
+
+/* O espaço reservado para as páginas (Dashboard, Configurações, etc.) */
+.dashboard-body {
+  flex-grow: 1; /* Garante que esta área estica e empurra o Footer para o fundo */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsividade: Diminuir o padding no telemóvel */
+@media (max-width: 48rem) {
+  .main-content {
+    padding: 1.25rem;
+  }
+}
