@@ -1,23 +1,67 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { IPedido } from '../models/pedido.model';
+import { Observable, from, switchMap, map } from 'rxjs';
+import { IPedido, ICriarPedido, IDistrito, IIdioma } from '../models/pedido.model';
+import { AuthService } from './auth';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   
-  // Usa o link do teu Render que está na tua documentação
-  private apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
+  private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
+  private readonly lookupUrl = 'https://integrabridge-api.onrender.com/api/lookup';
+  
+  /**
+   * Método privado para centralizar a lógica de autenticação.
+   * Segue o DRY (Don't Repeat Yourself).
+   */
+  private getAuthHeaders(): Observable<HttpHeaders> {
+    return from(this.authService.supabase.auth.getSession()).pipe(
+      map(({ data }) => {
+        const token = data.session?.access_token;
+        if (!token) {
+          console.warn('PedidoService: Nenhum token de sessão encontrado.');
+        }
+        return new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+      })
+    );
+  }
 
+  /**
+   * Obtém a lista de todos os pedidos.
+   */
   obterPedidos(): Observable<IPedido[]> {
-    // Por agora, vamos usar o Token que tens no Postman
-    const token = 'eyJhbGciOiJFUzI1NiIsImtpZCI6Ijg3YWM1YzA5LTdmMDItNGExMS04NWNiLTdjOWMyMWViNTljZSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NjZm9veHh6Znlsc2R4amtlcmNhLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJmNWU0MWYxMC0zZWFhLTRkNjQtOWY2Ny01MzZmMmZlMzIzYzMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc0ODcxMTAzLCJpYXQiOjE3NzQ4Njc1MDMsImVtYWlsIjoiZ2FicmllbGFAZ2FicmllbGEuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NzQ4Njc1MDN9XSwic2Vzc2lvbl9pZCI6IjQ4ZTQwNDU0LWFkODYtNGM2ZS1hMzZjLTE3MDk1ZTY2ZmMxMyIsImlzX2Fub255bW91cyI6ZmFsc2V9.4cfiLimBHHA3WBf9hJBcIZyll3jn9D1p611v-RrnH1Q-91BSzp2jxsJQt0i9aP7qaIE_-fp7VL88NEFQbaeLww'; 
-    
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<IPedido[]>(this.apiUrl, { headers }))
+    );
+  }
 
-    return this.http.get<IPedido[]>(this.apiUrl, { headers });
+  /**
+   * Cria um novo pedido de ajuda.
+   * @param novoPedido Objeto do tipo ICriarPedido (DTO)
+   * @returns Observable do pedido criado (IPedido)
+   */
+  criarPedido(novoPedido: ICriarPedido): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => 
+        this.http.post<IPedido>(this.apiUrl, novoPedido, { headers })
+      )
+    );
+  }
+
+  // --- Operações de Tabelas de Apoio (Lookups) ---
+  obterDistritos(): Observable<IDistrito[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.get<IDistrito[]>(`${this.lookupUrl}/distritos`, { headers }))
+    );
+  }
+
+  obterIdiomas(): Observable<IIdioma[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.get<IIdioma[]>(`${this.lookupUrl}/idiomas`, { headers }))
+    );
   }
 }

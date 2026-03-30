@@ -7,6 +7,8 @@ const pedidoRoutes = require('./routes/pedido.routes');
 // TEMPORARIO Precisamos do Supabase aqui apenas para a rota de login temporária
 const supabase = require('./config/supabase');
 
+const lookupRoutes = require('./routes/lookup.routes');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -39,6 +41,8 @@ app.post('/api/login', async (req, res) => {
 // ------------------------------------------------------------------
 
 app.use('/api/pedidos', pedidoRoutes);
+
+app.use('/api/lookup', lookupRoutes);
 
 app.listen(port, () => {
   console.log(`Servidor a correr na porta ${port}`);
