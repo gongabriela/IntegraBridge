@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap, map } from 'rxjs';
-import { IPedido, ICriarPedido } from '../models/pedido.model';
+import { IPedido, ICriarPedido, IDistrito, IIdioma } from '../models/pedido.model';
 import { AuthService } from './auth';
 
 @Injectable({ providedIn: 'root' })
@@ -10,7 +10,8 @@ export class PedidoService {
   private readonly authService = inject(AuthService);
   
   private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
-
+  private readonly lookupUrl = 'https://integrabridge-api.onrender.com/api/lookup';
+  
   /**
    * Método privado para centralizar a lógica de autenticação.
    * Segue o DRY (Don't Repeat Yourself).
@@ -48,6 +49,19 @@ export class PedidoService {
       switchMap((headers) => 
         this.http.post<IPedido>(this.apiUrl, novoPedido, { headers })
       )
+    );
+  }
+
+  // --- Operações de Tabelas de Apoio (Lookups) ---
+  obterDistritos(): Observable<IDistrito[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.get<IDistrito[]>(`${this.lookupUrl}/distritos`, { headers }))
+    );
+  }
+
+  obterIdiomas(): Observable<IIdioma[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.get<IIdioma[]>(`${this.lookupUrl}/idiomas`, { headers }))
     );
   }
 }
