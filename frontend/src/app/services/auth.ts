@@ -7,7 +7,7 @@ import { Login, Registrar } from '../models/auth.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private supabase: SupabaseClient;
+  public supabase: SupabaseClient;
 
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
