@@ -86,6 +86,7 @@ export class CriarPedido implements OnInit {
     return {
       titulo: raw.titulo,
       descricao: raw.descricao,
+      status: raw.status as PedidoStatus,
       urgencia: raw.urgencia as PedidoUrgencia,
       distrito_id: Number(raw.distrito_id),
       idioma_id: Number(raw.idioma_id)

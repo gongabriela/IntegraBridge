@@ -21,6 +21,7 @@ export interface IIdioma {
 export interface ICriarPedido {
   titulo: string;
   descricao: string;
+  status: PedidoStatus;
   urgencia: PedidoUrgencia;
   distrito_id: number;
   idioma_id: number;
