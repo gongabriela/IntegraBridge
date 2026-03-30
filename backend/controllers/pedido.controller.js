@@ -1,4 +1,5 @@
 const supabase = require('../config/supabase');
+const { createClient } = require('@supabase/supabase-js');
 
 exports.listarTodos = async (req, res) => {
   try {
@@ -32,15 +33,31 @@ exports.obterPorId = async (req, res) => {
 
 exports.criar = async (req, res) => {
   try {
-    const { titulo, descricao, idioma_id, urgencia, distrito_id } = req.body;
-    const { data, error } = await supabase
-      .from('pedidos_ajuda')
-      .insert([{ user_id: req.user.id, titulo, descricao, idioma_id, urgencia, distrito_id }])
-      .select();
+    const { titulo, descricao, idioma_id, urgencia, distrito_id, status } = req.body;
+    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
 
-    if (error) return res.status(400).json({ erro: error.message });
+    // 3. Fazemos o insert com o nosso cliente autenticado
+    const { data, error } = await supabaseAutenticado
+      .from('pedidos_ajuda')
+      .insert([{ 
+        user_id: req.user.id, 
+        titulo, 
+        descricao, 
+        idioma_id, 
+        urgencia, 
+        distrito_id, 
+        status // Adicionámos o status aqui!
+      }])
+      .select(); // O .select() garante que a BD nos devolve o objeto criado
+    if (error) {
+      console.error('Erro no Supabase:', error);
+      return res.status(400).json({ erro: error.message });
+    }
     res.status(201).json(data[0]);
   } catch (erroInesperado) {
+    console.error('Erro interno:', erroInesperado);
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 };
