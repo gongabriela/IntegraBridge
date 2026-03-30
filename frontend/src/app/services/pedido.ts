@@ -1,30 +1,40 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, switchMap } from 'rxjs';
-import { IPedido } from '../models/pedido.model';
-import { AuthService } from './auth'; // 1. Importa o teu AuthService
+import { Observable, from, switchMap, map } from 'rxjs';
+import { IPedido, ICriarPedido } from '../models/pedido.model';
+import { AuthService } from './auth';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
-  private http = inject(HttpClient);
-  private authService = inject(AuthService); // 2. Injeta o serviço de Auth
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
   
-  private apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
+  private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
 
-  obterPedidos(): Observable<IPedido[]> {
-    // 3. Usamos o cliente supabase que JÁ EXISTE dentro do teu AuthService
+  /**
+   * Método privado para centralizar a lógica de autenticação.
+   * Segue o DRY (Don't Repeat Yourself).
+   */
+  private getAuthHeaders(): Observable<HttpHeaders> {
     return from(this.authService.supabase.auth.getSession()).pipe(
-      switchMap(({ data }) => {
+      map(({ data }) => {
         const token = data.session?.access_token;
-        
-        console.log('Token recuperado para o pedido:', token ? token : 'Não (Vazio)');
-
-        const headers = new HttpHeaders({
+        if (!token) {
+          console.warn('PedidoService: Nenhum token de sessão encontrado.');
+        }
+        return new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
-
-        return this.http.get<IPedido[]>(this.apiUrl, { headers });
       })
+    );
+  }
+
+  /**
+   * Obtém a lista de todos os pedidos.
+   */
+  obterPedidos(): Observable<IPedido[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => this.http.get<IPedido[]>(this.apiUrl, { headers }))
     );
   }
 }
