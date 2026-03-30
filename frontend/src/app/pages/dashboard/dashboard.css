@@ -1,22 +1,4 @@
 /* =========================================
-   LAYOUT GLOBAL
-========================================= */
-.dashboard-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--bg-main);
-}
-
-/* =========================================
-   CONTEÚDO PRINCIPAL (MAIN)
-========================================= */
-.main-content {
-  flex-grow: 1;
-  padding: 2rem 3rem;
-  overflow-y: auto;
-}
-
-/* =========================================
    BANNERS DE ESTATÍSTICAS
 ========================================= */
 .stats-grid {
@@ -187,10 +169,6 @@
    RESPONSIVIDADE (MOBILE)
 ========================================= */
 @media (max-width: 48rem) {
-
-  .main-content {
-    padding: 1.25rem;
-  }
 
   .stats-grid {
     grid-template-columns: 1fr;

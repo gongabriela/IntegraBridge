@@ -1,56 +1,47 @@
-<div class="dashboard-layout">
+<div class="stats-grid">
+    <div class="stat-banner blue-banner">
+        <span class="banner-subtitle">PRIORITY OPERATIONS</span>
+        <h2>12 Active Cases</h2>
 
-    <main class="main-content">
-
-        <section class="dashboard-body">
-            <div class="stats-grid">
-                <div class="stat-banner blue-banner">
-                    <span class="banner-subtitle">PRIORITY OPERATIONS</span>
-                    <h2>12 Active Cases</h2>
-
-                    <div class="banner-sub-cards">
-                        <div class="sub-card">
-                            <h3>04</h3>
-                            <p>Urgent Review</p>
-                        </div>
-                        <div class="sub-card">
-                            <h3>08</h3>
-                            <p>Processing</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-banner light-banner">
-                    <div class="shield-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <polyline points="9 12 11 14 15 10"></polyline>
-                        </svg>
-                    </div>
-                    <h3>Institutional Trust</h3>
-                    <p>98% Resolution Rate this quarter across all regions.</p>
-                </div>
-
+        <div class="banner-sub-cards">
+            <div class="sub-card">
+                <h3>04</h3>
+                <p>Urgent Review</p>
             </div>
-            <div class="requests-section">
-                <div class="section-header">
-                    <h3>Recent Requests</h3>
-                    <button class="view-all">View All</button>
-                </div>
-            
-                <div class="requests-grid">
-                    <div class="create-card">
-                        <div class="plus-icon">+</div>
-                        <span>Create New Request</span>
-                    </div>
-            
-                    @for (pedido of meusPedidos; track pedido.id) {
-                    <app-card-pedido [dados]="pedido"></app-card-pedido>
-                    }
-                </div>
+            <div class="sub-card">
+                <h3>08</h3>
+                <p>Processing</p>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
+    <div class="stat-banner light-banner">
+        <div class="shield-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+        </div>
+        <h3>Institutional Trust</h3>
+        <p>98% Resolution Rate this quarter across all regions.</p>
+    </div>
+
+</div>
+<div class="requests-section">
+    <div class="section-header">
+        <h3>Recent Requests</h3>
+        <button class="view-all">View All</button>
+    </div>
+
+    <div class="requests-grid">
+        <div class="create-card">
+            <div class="plus-icon">+</div>
+            <span>Create New Request</span>
+        </div>
+
+        @for (pedido of meusPedidos; track pedido.id) {
+        <app-card-pedido [dados]="pedido"></app-card-pedido>
+        }
+    </div>
 </div>
