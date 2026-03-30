@@ -37,4 +37,17 @@ export class PedidoService {
       switchMap((headers) => this.http.get<IPedido[]>(this.apiUrl, { headers }))
     );
   }
+
+  /**
+   * Cria um novo pedido de ajuda.
+   * @param novoPedido Objeto do tipo ICriarPedido (DTO)
+   * @returns Observable do pedido criado (IPedido)
+   */
+  criarPedido(novoPedido: ICriarPedido): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => 
+        this.http.post<IPedido>(this.apiUrl, novoPedido, { headers })
+      )
+    );
+  }
 }
