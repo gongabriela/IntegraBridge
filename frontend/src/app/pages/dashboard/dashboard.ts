@@ -1,6 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
 import { CardPedidoComponent } from '../../components/card-pedido/card-pedido';
 import { IPedido } from '../../models/pedido.model';
 
@@ -12,8 +10,6 @@ import { IPedido } from '../../models/pedido.model';
   styleUrl: './dashboard.css'
 })
 export class Dashboard {
-  private authService = inject(AuthService);
-  private router = inject(Router);
 
   isSidebarOpen = false;
 
@@ -46,10 +42,5 @@ export class Dashboard {
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
-  }
-
-  async sair() {
-    await this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }
