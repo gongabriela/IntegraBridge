@@ -9,8 +9,8 @@ import { FooterComponent } from '../../components/footer/footer';
   standalone: true,
   // APAGAR COMENTARIO IMPORTANTE: Adicionar aqui todos os componentes que vão formar o Esqueleto
   imports: [RouterOutlet, SidebarComponent, NavbarComponent, FooterComponent],
-  templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css'
+  templateUrl: './main-layout.html',
+  styleUrl: './main-layout.css'
 })
 export class MainLayout {
   //APAGAR COMENTARIO O estado do menu mobile agora vive no Layout!

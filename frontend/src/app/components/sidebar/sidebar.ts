@@ -6,8 +6,8 @@ import { AuthService } from '../../services/auth';
   selector: 'app-sidebar',
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  templateUrl: './sidebar.html',
+  styleUrl: './sidebar.css'
 })
 export class SidebarComponent {
   // APAGAR Recebe do Layout a ordem para abrir/fechar no telemóvel
