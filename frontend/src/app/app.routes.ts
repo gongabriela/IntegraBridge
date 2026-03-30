@@ -9,7 +9,6 @@ import { MainLayout } from './layouts/main-layout/main-layout';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'criar-pedido', component: CriarPedido, canActivate: [authGuard] },
   { path: 'pedido/:id', component: PedidoDetalhe, canActivate: [authGuard] },
   {
     path: '', // APAGAR COMENTARIO Rota base protegida
@@ -17,7 +16,7 @@ export const routes: Routes = [
     canActivate: [authGuard], // APAGAR COMENTARIO Se tiveres o guard de autenticação, fica aqui
     children: [
       { path: 'dashboard', component: Dashboard },
-      // APAGAR COMENTARIO No futuro, adicionarás aqui: { path: 'configuracoes', component: ConfigComponent }
+      { path: 'criar-pedido', component: CriarPedido },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

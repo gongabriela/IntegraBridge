@@ -3,10 +3,11 @@ import { CardPedidoComponent } from '../../components/card-pedido/card-pedido';
 import { IPedido, PedidoStatus, PedidoUrgencia } from '../../models/pedido.model';
 import { PedidoService } from '../../services/pedido';
 import { AuthService } from '../../services/auth';
+import { RouterModule, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CardPedidoComponent], // 2. Importamos o componente do cartão aqui
+  imports: [CardPedidoComponent, RouterModule], // 2. Importamos o componente do cartão aqui
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
