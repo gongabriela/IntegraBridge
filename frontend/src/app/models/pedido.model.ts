@@ -42,6 +42,9 @@ export interface IPedido {
   urgencia: PedidoUrgencia;
   created_at: string;       
   
+  distrito_id?: number;
+  idioma_id?: number;
+  
   // Os objetos que vêm do JOIN da base de dados
   distritos: { nome: string };
   idiomas: { nome: string };
