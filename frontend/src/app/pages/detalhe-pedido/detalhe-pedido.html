@@ -83,17 +83,20 @@
 
       <footer class="card-actions">
         <div class="primary-actions">
-          <button class="btn-success">
-            ✔️ Marcar como Concluído
-          </button>
-          <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">
-            ✏️ Editar Pedido
-          </button>
+          
+          @if (isDonoDoPedido) {
+            <button class="btn-success">✔️ Marcar como Concluído</button>
+            <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">✏️ Editar Pedido</button>
+          } @else {
+            <button class="btn-primary" style="background-color: var(--action-primary); color: white;">
+              🤝 Posso Ajudar
+            </button>
+          }
         </div>
-
-        <button class="btn-danger" (click)="abrirModalApagar()">
-          🗑️ Apagar Pedido
-        </button>
+      
+        @if (isDonoDoPedido) {
+          <button class="btn-danger" (click)="abrirModalApagar()">🗑️ Apagar Pedido</button>
+        }
       </footer>
 
     </main>
