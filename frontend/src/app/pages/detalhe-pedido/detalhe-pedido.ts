@@ -36,8 +36,8 @@ export class DetalhePedidoComponent implements OnInit {
     
     if (id) {
       // 1. Primeiro descobrimos quem nós somos
-      this.authService.supabase.auth.getUser().then(({ data }) => {
-        this.usuarioAtualId = data.user?.id || null;
+      this.authService.obterUtilizadorAtual().then(user => {
+        this.usuarioAtualId = user?.id || null;
         // 2. Depois carregamos o pedido
         this.carregarPedido(id);
       });

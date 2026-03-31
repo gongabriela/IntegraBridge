@@ -20,9 +20,6 @@ export class Dashboard implements OnInit {
   meusPedidos: IPedido[] = [];
 
   ngOnInit(): void {
-      this.authService.supabase.auth.getUser().then(res => {
-    console.log('ID do utilizador atual:', res.data.user?.id);
-  });
     this.pedidoService.obterPedidos().subscribe({
       next: (dados) => {
         this.meusPedidos = dados;
