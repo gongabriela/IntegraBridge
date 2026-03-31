@@ -114,6 +114,7 @@ this.pedidoService.atualizarPedido(this.pedidoId, payload)
             redirecionar: true
           };
           this.mostrarAlert = true;
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Erro ao guardar:', err);
@@ -124,6 +125,7 @@ this.pedidoService.atualizarPedido(this.pedidoId, payload)
             redirecionar: false
           };
           this.mostrarAlert = true;
+          this.cdr.detectChanges();
         }
       });
   }

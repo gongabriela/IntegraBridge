@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -22,6 +22,7 @@ export class CriarPedido implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly pedidoService = inject(PedidoService);
   private readonly router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   // Listas originais que vêm da Base de Dados
   idiomas: IIdioma[] = [];
@@ -80,6 +81,7 @@ export class CriarPedido implements OnInit {
           redirecionar: true
         };
         this.mostrarModal = true;
+        this.cdr.detectChanges();
       },
       error: (error: HttpErrorResponse) => {
         this.modalConfig = {
@@ -89,6 +91,7 @@ export class CriarPedido implements OnInit {
           redirecionar: false
         };
         this.mostrarModal = true;
+        this.cdr.detectChanges();
       }
     });
   }
