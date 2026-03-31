@@ -1,7 +1,9 @@
-// src/app/models/pedido.model.ts
-
 export type PedidoStatus = 'pendente' | 'em_progresso' | 'concluido';
 export type PedidoUrgencia = 'baixa' | 'media' | 'alta';
+
+// Listas fixas para dropdowns (podem ser usadas em qualquer componente)
+export const LISTA_STATUS: PedidoStatus[] = ['pendente', 'em_progresso', 'concluido'];
+export const LISTA_URGENCIA: PedidoUrgencia[] = ['baixa', 'media', 'alta'];
 
 export interface IDistrito {
   id: number;
