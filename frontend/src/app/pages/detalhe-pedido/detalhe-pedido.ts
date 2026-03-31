@@ -27,8 +27,25 @@ export class DetalhePedidoComponent implements OnInit {
 
   // Variável para a secção de utilizadores atribuídos que pediste
   ajudantesAtribuidos: number = 2;
+  // 1. Variável de controlo da Modal
+  mostrarModalApagar: boolean = false;
 
   ngOnInit(): void {
     // Na Fase 2, faremos a subscrição do ActivatedRoute e chamaremos a API aqui.
+  }
+
+  // 2. Métodos de controlo
+  abrirModalApagar(): void {
+    this.mostrarModalApagar = true;
+  }
+
+  fecharModalApagar(): void {
+    this.mostrarModalApagar = false;
+  }
+
+  confirmarApagar(): void {
+    // depois chamaremos o this.pedidoService.apagarPedido() aqui
+    console.log('A apagar o pedido:', this.pedido.id);
+    this.fecharModalApagar(); 
   }
 }

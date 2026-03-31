@@ -304,3 +304,91 @@ button {
     justify-content: center;
   }
 }
+
+/* =========================================
+   ESTILOS DA JANELA MODAL
+   ========================================= */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6); /* Cor escura transparente */
+  backdrop-filter: blur(4px); /* Efeito de desfoque moderno */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Fica por cima de TUDO no site */
+  padding: 1.25rem;
+}
+
+.modal-content {
+  background-color: var(--bg-surface);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 28rem; /* ~448px */
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.warning-icon {
+  font-size: 1.5rem;
+}
+
+.modal-content h3 {
+  font-size: 1.25rem;
+  color: var(--status-error); /* Vermelho para dar sensação de perigo */
+}
+
+.modal-content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.modal-content strong {
+  color: var(--text-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* O botão vermelho sólido para a confirmação final */
+.btn-danger-solid {
+  background-color: var(--status-error);
+  color: white;
+  border: none;
+}
+.btn-danger-solid:hover {
+  filter: brightness(0.9);
+}
+
+/* Animação suave de entrada */
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade da Modal */
+@media (max-width: 48rem) {
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+  .modal-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}

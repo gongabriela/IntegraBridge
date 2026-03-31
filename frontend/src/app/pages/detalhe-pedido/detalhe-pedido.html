@@ -81,10 +81,31 @@
         </button>
       </div>
       
-      <button class="btn-danger">
+      <button class="btn-danger" (click)="abrirModalApagar()">
         🗑️ Delete Request
       </button>
+
     </footer>
 
   </main>
 </div>
+
+@if (mostrarModalApagar) {
+  <div class="modal-backdrop" (click)="fecharModalApagar()">
+    
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="warning-icon">⚠️</span>
+        <h3>Delete Request</h3>
+      </div>
+      
+      <p>Are you sure you want to permanently delete the request <strong>"{{ pedido.titulo }}"</strong>? This action cannot be undone.</p>
+      
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="fecharModalApagar()">Cancel</button>
+        <button class="btn-danger-solid" (click)="confirmarApagar()">Yes, Delete</button>
+      </div>
+    </div>
+
+  </div>
+}
