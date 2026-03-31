@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { IPedido } from '../../models/pedido.model';
+import { PedidoService } from '../../services/pedido';
+import { AuthService } from '../../services/auth'; // <-- IMPORTANTE
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-detalhe-pedido',
@@ -11,41 +14,76 @@ import { IPedido } from '../../models/pedido.model';
   styleUrl: './detalhe-pedido.css'
 })
 export class DetalhePedidoComponent implements OnInit {
-  
-  // DADOS FALSOS (MOCK) APENAS PARA A FASE 1
-  pedido: IPedido = {
-    id: '4902-ABCD-EFGH',
-    user_id: 'user-123',
-    titulo: 'Legal Documentation Support for Asylum Application',
-    descricao: 'The applicant is seeking comprehensive assistance in translating and notarizing official identification documents and educational transcripts from their country of origin for a pending asylum application process.\n\nCritical documents include: Original Birth Certificate, University Diploma in Civil Engineering, and a detailed personal statement that requires linguistic refinement for official submission.\n\nPriority is marked as high due to an upcoming hearing scheduled for early December.',
-    status: 'em_progresso',
-    urgencia: 'alta',
-    created_at: new Date().toISOString(),
-    distritos: { nome: 'Setúbal' },
-    idiomas: { nome: 'Inglês' }
-  };
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private pedidoService = inject(PedidoService);
+  private authService = inject(AuthService); // <-- Injetar o AuthService
+  private cdr = inject(ChangeDetectorRef);
 
-  // Variável para a secção de utilizadores atribuídos que pediste
-  ajudantesAtribuidos: number = 2;
-  // 1. Variável de controlo da Modal
+  pedido: IPedido | null = null;
+  carregando: boolean = true;
+  erro: string = '';
+
+  ajudantesAtribuidos: number = 0;
   mostrarModalApagar: boolean = false;
+  
+  // Novas variáveis de controlo
+  usuarioAtualId: string | null = null;
+  isDonoDoPedido: boolean = false;
 
   ngOnInit(): void {
-    // Na Fase 2, faremos a subscrição do ActivatedRoute e chamaremos a API aqui.
+    const id = this.route.snapshot.paramMap.get('id');
+    
+    if (id) {
+      // 1. Primeiro descobrimos quem nós somos
+      this.authService.supabase.auth.getUser().then(({ data }) => {
+        this.usuarioAtualId = data.user?.id || null;
+        // 2. Depois carregamos o pedido
+        this.carregarPedido(id);
+      });
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
-  // 2. Métodos de controlo
-  abrirModalApagar(): void {
-    this.mostrarModalApagar = true;
+  private carregarPedido(id: string): void {
+    this.pedidoService.obterPorId(id)
+      .pipe(finalize(() => {
+        this.carregando = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (dados) => {
+          this.pedido = dados;
+          // 3. Verificamos se somos os donos
+          this.isDonoDoPedido = this.usuarioAtualId === this.pedido.user_id;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Erro ao carregar pedido:', err);
+          this.erro = 'Não foi possível carregar os detalhes deste pedido.';
+        }
+      });
   }
 
-  fecharModalApagar(): void {
-    this.mostrarModalApagar = false;
-  }
+  abrirModalApagar(): void { this.mostrarModalApagar = true; }
+  fecharModalApagar(): void { this.mostrarModalApagar = false; }
 
+  // A LÓGICA REAL DE APAGAR
   confirmarApagar(): void {
-    // depois chamaremos o this.pedidoService.apagarPedido() aqui
-    console.log('A apagar o pedido:', this.pedido.id);
-    this.fecharModalApagar(); 
+    if (!this.pedido) return;
+
+    this.pedidoService.apagarPedido(this.pedido.id).subscribe({
+      next: () => {
+        this.fecharModalApagar();
+        // Volta para o dashboard e força o recarregamento
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Erro ao apagar:', err);
+        this.fecharModalApagar();
+        alert('Ocorreu um erro ao apagar o pedido. Verifique as suas permissões.');
+      }
+    });
   }
 }

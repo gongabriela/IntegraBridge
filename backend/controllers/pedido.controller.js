@@ -15,19 +15,29 @@ exports.listarTodos = async (req, res) => {
   }
 };
 
+// pedido.controller.js (Backend)
 exports.obterPorId = async (req, res) => {
   try {
     const pedidoId = req.params.id;
-    const { data, error } = await supabase
+
+    // CRIAR CLIENTE AUTENTICADO (Igual ao que fizemos no 'criar')
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+
+    const { data, error } = await supabaseAutenticado
       .from('pedidos_ajuda')
       .select('*, distritos(nome), idiomas(nome)')
       .eq('id', pedidoId)
       .single();
 
-    if (error) return res.status(404).json({ erro: 'Pedido de ajuda não encontrado.' });
+    if (error) return res.status(404).json({ erro: 'Pedido não encontrado.' });
+    
     res.json(data);
   } catch (erroInesperado) {
-    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+    console.error(erroInesperado);
+    res.status(500).json({ erro: 'Erro interno no servidor.' });
   }
 };
 
@@ -68,15 +78,21 @@ exports.atualizar = async (req, res) => {
     const donoId = req.user.id;
     const { titulo, descricao, idioma_id, urgencia, distrito_id, status } = req.body;
 
-    const { data, error } = await supabase
+    // CRIAR CLIENTE AUTENTICADO
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+
+    const { data, error } = await supabaseAutenticado
       .from('pedidos_ajuda')
       .update({ titulo, descricao, idioma_id, urgencia, distrito_id, status })
       .eq('id', pedidoId)
-      .eq('user_id', donoId)
+      .eq('user_id', donoId) // Segurança Dupla!
       .select();
 
     if (error) return res.status(400).json({ erro: error.message });
-    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado.' });
+    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado ou pedido não encontrado.' });
     
     res.json(data[0]);
   } catch (erroInesperado) {
@@ -89,17 +105,23 @@ exports.apagar = async (req, res) => {
     const pedidoId = req.params.id;
     const donoId = req.user.id;
 
-    const { data, error } = await supabase
+    // CRIAR CLIENTE AUTENTICADO
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+
+    const { data, error } = await supabaseAutenticado
       .from('pedidos_ajuda')
       .delete()
       .eq('id', pedidoId)
-      .eq('user_id', donoId)
+      .eq('user_id', donoId) // Segurança Dupla!
       .select();
 
     if (error) return res.status(400).json({ erro: error.message });
-    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado.' });
+    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado ou pedido não encontrado.' });
     
-    res.json({ mensagem: 'Pedido de ajuda apagado com sucesso!' });
+    res.status(204).send(); // 204 significa "Apagado com sucesso e sem conteúdo a devolver"
   } catch (erroInesperado) {
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
