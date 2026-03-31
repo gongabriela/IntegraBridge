@@ -64,4 +64,32 @@ export class PedidoService {
       switchMap(headers => this.http.get<IIdioma[]>(`${this.lookupUrl}/idiomas`, { headers }))
     );
   }
+
+/**
+   * Obtém os detalhes completos de um pedido específico.
+   */
+  obterPorId(id: string): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.get<IPedido>(`${this.apiUrl}/${id}`, { headers }))
+    );
+  }
+
+  /**
+   * Atualiza um pedido existente. 
+   * Usamos Partial<IPedido> para podermos enviar apenas o que mudou.
+   */
+  atualizarPedido(id: string, payload: Partial<IPedido>): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.put<IPedido>(`${this.apiUrl}/${id}`, payload, { headers }))
+    );
+  }
+
+  /**
+   * Apaga um pedido permanentemente da base de dados.
+   */
+  apagarPedido(id: string): Observable<void> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers => this.http.delete<void>(`${this.apiUrl}/${id}`, { headers }))
+    );
+  }
 }
