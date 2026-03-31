@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { IPedido } from '../../models/pedido.model';
+import { PedidoService } from '../../services/pedido';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-detalhe-pedido',
@@ -11,30 +13,46 @@ import { IPedido } from '../../models/pedido.model';
   styleUrl: './detalhe-pedido.css'
 })
 export class DetalhePedidoComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private pedidoService = inject(PedidoService);
+  private cdr = inject(ChangeDetectorRef);
   
-  // DADOS FALSOS (MOCK) APENAS PARA A FASE 1
-  pedido: IPedido = {
-    id: '4902-ABCD-EFGH',
-    user_id: 'user-123',
-    titulo: 'Legal Documentation Support for Asylum Application',
-    descricao: 'The applicant is seeking comprehensive assistance in translating and notarizing official identification documents and educational transcripts from their country of origin for a pending asylum application process.\n\nCritical documents include: Original Birth Certificate, University Diploma in Civil Engineering, and a detailed personal statement that requires linguistic refinement for official submission.\n\nPriority is marked as high due to an upcoming hearing scheduled for early December.',
-    status: 'em_progresso',
-    urgencia: 'alta',
-    created_at: new Date().toISOString(),
-    distritos: { nome: 'Setúbal' },
-    idiomas: { nome: 'Inglês' }
-  };
+  // Agora o pedido começa vazio (null) e temos um estado de loading
+  pedido: IPedido | null = null;
+  carregando: boolean = true;
+  erro: string = '';
 
-  // Variável para a secção de utilizadores atribuídos que pediste
-  ajudantesAtribuidos: number = 2;
-  // 1. Variável de controlo da Modal
+  ajudantesAtribuidos: number = 0; // Vai ficar a 0 por enquanto
+
   mostrarModalApagar: boolean = false;
 
   ngOnInit(): void {
-    // Na Fase 2, faremos a subscrição do ActivatedRoute e chamaremos a API aqui.
+    // 1. Apanhar o ID que está no URL
+    const id = this.route.snapshot.paramMap.get('id');
+    
+    if (id) {
+      this.carregarPedido(id);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
-  // 2. Métodos de controlo
+  private carregarPedido(id: string): void {
+    this.pedidoService.obterPorId(id)
+      .pipe(finalize(() => {
+        this.carregando = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (dados) => { this.pedido = dados;},
+        error: (err) => {
+          console.error('Erro ao carregar pedido:', err);
+          this.erro = 'Não foi possível carregar os detalhes deste pedido.';
+        }
+      });
+  }
+
   abrirModalApagar(): void {
     this.mostrarModalApagar = true;
   }
@@ -44,8 +62,7 @@ export class DetalhePedidoComponent implements OnInit {
   }
 
   confirmarApagar(): void {
-    // depois chamaremos o this.pedidoService.apagarPedido() aqui
-    console.log('A apagar o pedido:', this.pedido.id);
-    this.fecharModalApagar(); 
+    console.log('Faremos o delete aqui mais tarde');
+    this.fecharModalApagar();
   }
 }
