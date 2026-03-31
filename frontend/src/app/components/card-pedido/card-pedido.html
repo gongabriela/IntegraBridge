@@ -15,5 +15,5 @@
 
   <p class="card-desc">{{ dados.descricao }}</p>
 
-  <button class="view-btn">Ver Detalhes</button>
+  <button class="view-btn" [routerLink]="['/pedido', dados.id]">Ver Detalhes</button>
 </div>
