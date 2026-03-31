@@ -2,7 +2,11 @@
   
   <app-sidebar 
     [isOpen]="isSidebarOpen" 
-    (close)="toggleSidebar()">
+    [nomeUtilizador]="nome"
+    [emailUtilizador]="email"
+    [inicialAvatar]="inicial"
+    (close)="toggleSidebar()"
+    (logoutAction)="realizarLogout()">
   </app-sidebar>
 
   <main class="main-content">
