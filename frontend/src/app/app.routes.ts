@@ -12,17 +12,13 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '', 
-    component: MainLayout, // Carrega o Esqueleto (Sidebar + Header)
-    canActivate: [authGuard], // Protege todas as rotas filhas
+    component: MainLayout,
+    canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'criar-pedido', component: CriarPedido },
-      
-      // Movi o detalhe-pedido para dentro do MainLayout!
       { path: 'pedido/:id', component: DetalhePedidoComponent },
-      
       { path: 'pedido/:id/editar', component: EditarPedidoComponent },
-
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }
