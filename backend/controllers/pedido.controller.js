@@ -1,128 +1,55 @@
-const supabase = require('../config/supabase');
-const { createClient } = require('@supabase/supabase-js');
+const pedidoService = require('../services/pedido.service');
 
 exports.listarTodos = async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('pedidos_ajuda')
-      .select('*, distritos(nome), idiomas(nome)')
-      .order('created_at', { ascending: false });
-
-    if (error) return res.status(400).json({ erro: error.message });
-    res.json(data);
-  } catch (erroInesperado) {
+    const pedidos = await pedidoService.listarTodos();
+    res.json(pedidos);
+  } catch (erro) {
     res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
   }
 };
 
-// pedido.controller.js (Backend)
 exports.obterPorId = async (req, res) => {
   try {
-    const pedidoId = req.params.id;
-
-    // CRIAR CLIENTE AUTENTICADO (Igual ao que fizemos no 'criar')
-    const { createClient } = require('@supabase/supabase-js');
-    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
-      global: { headers: { Authorization: req.headers.authorization } }
-    });
-
-    const { data, error } = await supabaseAutenticado
-      .from('pedidos_ajuda')
-      .select('*, distritos(nome), idiomas(nome)')
-      .eq('id', pedidoId)
-      .single();
-
-    if (error) return res.status(404).json({ erro: 'Pedido não encontrado.' });
-    
-    res.json(data);
-  } catch (erroInesperado) {
-    console.error(erroInesperado);
-    res.status(500).json({ erro: 'Erro interno no servidor.' });
+    const pedido = await pedidoService.obterPorId(req.params.id, req.headers.authorization);
+    res.json(pedido);
+  } catch (erro) {
+    res.status(404).json({ erro: erro.message });
   }
 };
 
 exports.criar = async (req, res) => {
   try {
-    const { titulo, descricao, idioma_id, urgencia, distrito_id, status } = req.body;
-    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
-      global: { headers: { Authorization: req.headers.authorization } }
-    });
-
-    // 3. Fazemos o insert com o nosso cliente autenticado
-    const { data, error } = await supabaseAutenticado
-      .from('pedidos_ajuda')
-      .insert([{ 
-        user_id: req.user.id, 
-        titulo, 
-        descricao, 
-        idioma_id, 
-        urgencia, 
-        distrito_id, 
-        status // Adicionámos o status aqui!
-      }])
-      .select(); // O .select() garante que a BD nos devolve o objeto criado
-    if (error) {
-      console.error('Erro no Supabase:', error);
-      return res.status(400).json({ erro: error.message });
-    }
-    res.status(201).json(data[0]);
-  } catch (erroInesperado) {
-    console.error('Erro interno:', erroInesperado);
-    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+    const payload = {
+      ...req.body,
+      user_id: req.user.id
+    };
+    const novoPedido = await pedidoService.criar(payload, req.headers.authorization);
+    res.status(201).json(novoPedido);
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message });
   }
 };
 
 exports.atualizar = async (req, res) => {
   try {
-    const pedidoId = req.params.id;
-    const donoId = req.user.id;
-    const { titulo, descricao, idioma_id, urgencia, distrito_id, status } = req.body;
-
-    // CRIAR CLIENTE AUTENTICADO
-    const { createClient } = require('@supabase/supabase-js');
-    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
-      global: { headers: { Authorization: req.headers.authorization } }
-    });
-
-    const { data, error } = await supabaseAutenticado
-      .from('pedidos_ajuda')
-      .update({ titulo, descricao, idioma_id, urgencia, distrito_id, status })
-      .eq('id', pedidoId)
-      .eq('user_id', donoId) // Segurança Dupla!
-      .select();
-
-    if (error) return res.status(400).json({ erro: error.message });
-    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado ou pedido não encontrado.' });
-    
-    res.json(data[0]);
-  } catch (erroInesperado) {
-    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+    const pedidoAtualizado = await pedidoService.atualizar(
+      req.params.id, 
+      req.user.id, 
+      req.body, 
+      req.headers.authorization
+    );
+    res.json(pedidoAtualizado);
+  } catch (erro) {
+    res.status(403).json({ erro: erro.message });
   }
 };
 
 exports.apagar = async (req, res) => {
   try {
-    const pedidoId = req.params.id;
-    const donoId = req.user.id;
-
-    // CRIAR CLIENTE AUTENTICADO
-    const { createClient } = require('@supabase/supabase-js');
-    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
-      global: { headers: { Authorization: req.headers.authorization } }
-    });
-
-    const { data, error } = await supabaseAutenticado
-      .from('pedidos_ajuda')
-      .delete()
-      .eq('id', pedidoId)
-      .eq('user_id', donoId) // Segurança Dupla!
-      .select();
-
-    if (error) return res.status(400).json({ erro: error.message });
-    if (data.length === 0) return res.status(403).json({ erro: 'Acesso negado ou pedido não encontrado.' });
-    
-    res.status(204).send(); // 204 significa "Apagado com sucesso e sem conteúdo a devolver"
-  } catch (erroInesperado) {
-    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+    await pedidoService.apagar(req.params.id, req.user.id, req.headers.authorization);
+    res.status(204).send();
+  } catch (erro) {
+    res.status(403).json({ erro: erro.message });
   }
 };
