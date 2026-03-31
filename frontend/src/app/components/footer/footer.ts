@@ -8,6 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './footer.css'
 })
 export class FooterComponent {
-  // APAGAR COMENTARIO Pega o ano atual automaticamente do sistema
   anoAtual = new Date().getFullYear();
 }
