@@ -1,0 +1,19 @@
+<div class="modal-backdrop" (click)="fechar.emit()">
+  
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    
+    <div class="icon-container" [ngClass]="tipo">
+      @if (tipo === 'sucesso') { 
+        <span>✔️</span> 
+      } @else { 
+        <span>⚠️</span> 
+      }
+    </div>
+
+    <h3>{{ titulo }}</h3>
+    <p>{{ mensagem }}</p>
+    
+    <button class="btn-submit" (click)="fechar.emit()">Entendi</button>
+  </div>
+  
+</div>

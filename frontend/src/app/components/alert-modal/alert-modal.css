@@ -1,0 +1,75 @@
+/* Fundo escuro com efeito de desfoque moderno (Glassmorphism) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* Ligeiramente mais escuro para contraste */
+  backdrop-filter: blur(4px); /* Desfoca o fundo da página */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; 
+}
+
+/* Caixa central mais elegante */
+.modal-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 2.5rem 2rem; /* Aumentei o espaço interno (respiro) */
+  border-radius: 0.75rem; /* Bordas um pouco mais suaves */
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  /* Sombra mais difusa e moderna */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  animation: modalFadeIn 0.3s ease-out; 
+}
+
+/* Container do Ícone */
+.icon-container {
+  font-size: 3.5rem; /* Ícone ligeiramente maior */
+  margin-bottom: 1.25rem;
+  line-height: 1;
+}
+
+/* Tipografia */
+h3 {
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+p {
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+  margin-bottom: 2rem; /* Mais espaço antes do botão */
+  line-height: 1.6;
+}
+
+/* Botão Universal */
+.btn-submit {
+  width: 100%;
+  background-color: var(--action-primary);
+  color: var(--action-text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 0.875rem 1.5rem; /* Botão um pouco mais alto e confortável para clicar */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+.btn-submit:active {
+  transform: scale(0.98); /* Efeito de clique tátil */
+}
+
+/* Animação suave para a modal aparecer */
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
