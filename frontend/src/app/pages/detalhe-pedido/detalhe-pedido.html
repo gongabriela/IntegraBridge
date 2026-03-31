@@ -1,0 +1,108 @@
+<div class="page-container">
+  
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">Meus Pedidos</a>
+    <span class="separator">></span>
+    <span class="current">Pedido #IB-{{ pedido.id.substring(0, 4) }}</span>
+  </nav>
+
+  <main class="detalhes-card">
+    
+    <header class="card-header">
+      <div class="header-content">
+        <h1 class="title">{{ pedido.titulo }}</h1>
+        <div class="meta-row">
+          <span class="status-badge" [class]="pedido.status">
+            {{ pedido.status === 'em_progresso' ? 'Em Progresso' : (pedido.status | titlecase) }}
+          </span>
+          <span class="date">📅 Submetido a {{ pedido.created_at | date:'mediumDate' }}</span>
+        </div>
+      </div>
+      
+      <div class="assigned-block">
+        <div class="avatars">
+          <div class="avatar">👤</div>
+          <div class="avatar">👤</div>
+        </div>
+        <div class="assigned-text">
+          <strong>{{ ajudantesAtribuidos }}</strong><br>
+          atribuídos
+        </div>
+      </div>
+    </header>
+
+    <hr class="divider">
+
+    <div class="card-body">
+      
+      <section class="description-section">
+        <h3>📄 Descrição do Pedido</h3>
+        <p class="description-text">{{ pedido.descricao }}</p>
+        
+        <div class="info-blocks">
+          <div class="info-box">
+            <span class="info-label">IDIOMA</span>
+            <strong class="info-value">{{ pedido.idiomas.nome }}</strong>
+          </div>
+          <div class="info-box">
+            <span class="info-label">DISTRITO / LOCAL</span>
+            <strong class="info-value">{{ pedido.distritos.nome }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside class="metadata-panel">
+        <h4>Metadados do Caso</h4>
+        <div class="meta-item">
+          <span class="meta-label">ID de Referência</span>
+          <span class="meta-value bold">#IB-{{ pedido.id.substring(0, 4) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Urgência</span>
+          <span class="meta-value urgency" [class]="pedido.urgencia">{{ pedido.urgencia | titlecase }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Última Atividade</span>
+          <span class="meta-value">há 2 horas</span>
+        </div>
+      </aside>
+
+    </div>
+
+    <hr class="divider">
+
+    <footer class="card-actions">
+      <div class="primary-actions">
+        <button class="btn-success">
+          ✔️ Marcar como Concluído
+        </button>
+        <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">
+          ✏️ Editar Pedido
+        </button>
+      </div>
+      
+      <button class="btn-danger" (click)="abrirModalApagar()">
+        🗑️ Apagar Pedido
+      </button>
+    </footer>
+
+  </main>
+</div>
+
+@if (mostrarModalApagar) {
+  <div class="modal-backdrop" (click)="fecharModalApagar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="warning-icon">⚠️</span>
+        <h3>Apagar Pedido</h3>
+      </div>
+      
+      <p>Tem a certeza que deseja apagar permanentemente o pedido <strong>"{{ pedido.titulo }}"</strong>? Esta ação não pode ser desfeita.</p>
+      
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="fecharModalApagar()">Cancelar</button>
+        <button class="btn-danger-solid" (click)="confirmarApagar()">Sim, Apagar</button>
+      </div>
+    </div>
+  </div>
+}

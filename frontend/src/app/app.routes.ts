@@ -2,21 +2,27 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { CriarPedido } from './pages/criar-pedido/criar-pedido';
-import { PedidoDetalhe } from './pages/pedido-detalhe/pedido-detalhe';
+import { DetalhePedidoComponent } from './pages/detalhe-pedido/detalhe-pedido';
 import { authGuard } from './guards/auth-guard';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { EditarPedidoComponent } from './pages/editar-pedido/editar-pedido';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'pedido/:id', component: PedidoDetalhe, canActivate: [authGuard] },
   {
-    path: '', // APAGAR COMENTARIO Rota base protegida
-    component: MainLayout, // APAGAR COMENTARIO Carrega o Esqueleto primeiro!
-    canActivate: [authGuard], // APAGAR COMENTARIO Se tiveres o guard de autenticação, fica aqui
+    path: '', 
+    component: MainLayout, // Carrega o Esqueleto (Sidebar + Header)
+    canActivate: [authGuard], // Protege todas as rotas filhas
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'criar-pedido', component: CriarPedido },
+      
+      // Movi o detalhe-pedido para dentro do MainLayout!
+      { path: 'pedido/:id', component: DetalhePedidoComponent },
+      
+      { path: 'pedido/:id/editar', component: EditarPedidoComponent },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }
