@@ -38,8 +38,8 @@ export class CriarPedido implements OnInit {
   readonly pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
-    status: ['pendente' as PedidoStatus, [Validators.required]],
-    urgencia: ['media' as PedidoUrgencia, [Validators.required]],
+    status: [this.opcoesStatus[0], [Validators.required]],
+    urgencia: [this.opcoesUrgencia[1], [Validators.required]],
     distrito_id: ['', [Validators.required]],
     idioma_id: ['', [Validators.required]]
   });
