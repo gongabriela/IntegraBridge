@@ -1,6 +1,5 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,17 +9,12 @@ import { AuthService } from '../../services/auth';
   styleUrl: './sidebar.css'
 })
 export class SidebarComponent {
-  // APAGAR Recebe do Layout a ordem para abrir/fechar no telemóvel
   @Input() isOpen = false;
   
-  //APAGAR Avisa o Layout quando o utilizador clica no fundo escuro para fechar
+  @Input() nomeUtilizador: string = 'Carregando...';
+  @Input() emailUtilizador: string = '';
+  @Input() inicialAvatar: string = '';
+
   @Output() close = new EventEmitter<void>();
-
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
-  async sair() {
-    await this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+  @Output() logoutAction = new EventEmitter<void>();
 }
