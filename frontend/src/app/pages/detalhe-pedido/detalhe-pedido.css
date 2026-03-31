@@ -249,26 +249,56 @@ button {
   border-color: var(--status-error);
 }
 
-/* Responsividade Mobile Extrema */
+/* =========================================
+   RESPONSIVIDADE (MOBILE)
+   ========================================= */
 @media (max-width: 48rem) {
+  /* 1. Recuperar espaço vital reduzindo o padding do cartão */
+  .detalhes-card {
+    padding: 1.25rem;
+  }
+
+  /* 2. Reduzir o tamanho da fonte do título principal */
+  .title {
+    font-size: 1.5rem;
+  }
+
+  /* 3. Permitir que o status e a data saltem de linha se necessário */
+  .meta-row {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
   .card-header {
     flex-direction: column;
   }
+
   .card-body {
     flex-direction: column;
     gap: 2rem;
   }
+
   .info-blocks {
     flex-direction: column;
   }
+
+  /* 4. Empilhar a Label e o Valor no Painel de Metadados para não quebrarem as palavras */
+  .meta-item {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  /* Botoes */
   .card-actions {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   }
+  
   .primary-actions {
     flex-direction: column;
     width: 100%;
   }
+  
   .card-actions button {
     width: 100%;
     justify-content: center;
