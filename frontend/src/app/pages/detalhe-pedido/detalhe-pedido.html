@@ -1,9 +1,9 @@
 <div class="page-container">
   
   <nav class="breadcrumb">
-    <a routerLink="/dashboard">My Cases</a>
+    <a routerLink="/dashboard">Meus Pedidos</a>
     <span class="separator">></span>
-    <span class="current">Request #IB-{{ pedido.id.substring(0, 4) }}</span>
+    <span class="current">Pedido #IB-{{ pedido.id.substring(0, 4) }}</span>
   </nav>
 
   <main class="detalhes-card">
@@ -13,9 +13,9 @@
         <h1 class="title">{{ pedido.titulo }}</h1>
         <div class="meta-row">
           <span class="status-badge" [class]="pedido.status">
-            {{ pedido.status === 'em_progresso' ? 'In Progress' : (pedido.status | titlecase) }}
+            {{ pedido.status === 'em_progresso' ? 'Em Progresso' : (pedido.status | titlecase) }}
           </span>
-          <span class="date">📅 Submitted {{ pedido.created_at | date:'mediumDate' }}</span>
+          <span class="date">📅 Submetido a {{ pedido.created_at | date:'mediumDate' }}</span>
         </div>
       </div>
       
@@ -26,7 +26,7 @@
         </div>
         <div class="assigned-text">
           <strong>{{ ajudantesAtribuidos }}</strong><br>
-          assigned
+          atribuídos
         </div>
       </div>
     </header>
@@ -36,34 +36,34 @@
     <div class="card-body">
       
       <section class="description-section">
-        <h3>📄 Request Description</h3>
+        <h3>📄 Descrição do Pedido</h3>
         <p class="description-text">{{ pedido.descricao }}</p>
         
         <div class="info-blocks">
           <div class="info-box">
-            <span class="info-label">LANGUAGE</span>
+            <span class="info-label">IDIOMA</span>
             <strong class="info-value">{{ pedido.idiomas.nome }}</strong>
           </div>
           <div class="info-box">
-            <span class="info-label">DISTRICT / LOCATION</span>
+            <span class="info-label">DISTRITO / LOCAL</span>
             <strong class="info-value">{{ pedido.distritos.nome }}</strong>
           </div>
         </div>
       </section>
 
       <aside class="metadata-panel">
-        <h4>Case Metadata</h4>
+        <h4>Metadados do Caso</h4>
         <div class="meta-item">
-          <span class="meta-label">Reference ID</span>
+          <span class="meta-label">ID de Referência</span>
           <span class="meta-value bold">#IB-{{ pedido.id.substring(0, 4) }}</span>
         </div>
         <div class="meta-item">
-          <span class="meta-label">Urgency</span>
+          <span class="meta-label">Urgência</span>
           <span class="meta-value urgency" [class]="pedido.urgencia">{{ pedido.urgencia | titlecase }}</span>
         </div>
         <div class="meta-item">
-          <span class="meta-label">Last Activity</span>
-          <span class="meta-value">2 hours ago</span>
+          <span class="meta-label">Última Atividade</span>
+          <span class="meta-value">há 2 horas</span>
         </div>
       </aside>
 
@@ -74,17 +74,16 @@
     <footer class="card-actions">
       <div class="primary-actions">
         <button class="btn-success">
-          ✔️ Mark as Completed
+          ✔️ Marcar como Concluído
         </button>
         <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">
-          ✏️ Edit Request
+          ✏️ Editar Pedido
         </button>
       </div>
       
       <button class="btn-danger" (click)="abrirModalApagar()">
-        🗑️ Delete Request
+        🗑️ Apagar Pedido
       </button>
-
     </footer>
 
   </main>
@@ -92,20 +91,18 @@
 
 @if (mostrarModalApagar) {
   <div class="modal-backdrop" (click)="fecharModalApagar()">
-    
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <span class="warning-icon">⚠️</span>
-        <h3>Delete Request</h3>
+        <h3>Apagar Pedido</h3>
       </div>
       
-      <p>Are you sure you want to permanently delete the request <strong>"{{ pedido.titulo }}"</strong>? This action cannot be undone.</p>
+      <p>Tem a certeza que deseja apagar permanentemente o pedido <strong>"{{ pedido.titulo }}"</strong>? Esta ação não pode ser desfeita.</p>
       
       <div class="modal-actions">
-        <button class="btn-outline" (click)="fecharModalApagar()">Cancel</button>
-        <button class="btn-danger-solid" (click)="confirmarApagar()">Yes, Delete</button>
+        <button class="btn-outline" (click)="fecharModalApagar()">Cancelar</button>
+        <button class="btn-danger-solid" (click)="confirmarApagar()">Sim, Apagar</button>
       </div>
     </div>
-
   </div>
 }
