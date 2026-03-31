@@ -15,19 +15,29 @@ exports.listarTodos = async (req, res) => {
   }
 };
 
+// pedido.controller.js (Backend)
 exports.obterPorId = async (req, res) => {
   try {
     const pedidoId = req.params.id;
-    const { data, error } = await supabase
+
+    // CRIAR CLIENTE AUTENTICADO (Igual ao que fizemos no 'criar')
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseAutenticado = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+
+    const { data, error } = await supabaseAutenticado
       .from('pedidos_ajuda')
       .select('*, distritos(nome), idiomas(nome)')
       .eq('id', pedidoId)
       .single();
 
-    if (error) return res.status(404).json({ erro: 'Pedido de ajuda não encontrado.' });
+    if (error) return res.status(404).json({ erro: 'Pedido não encontrado.' });
+    
     res.json(data);
   } catch (erroInesperado) {
-    res.status(500).json({ erro: 'Ocorreu um erro interno no servidor.' });
+    console.error(erroInesperado);
+    res.status(500).json({ erro: 'Erro interno no servidor.' });
   }
 };
 
