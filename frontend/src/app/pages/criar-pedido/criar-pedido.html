@@ -85,10 +85,10 @@
 </div>
 
 @if (mostrarModal) {
-  <app-modal 
+  <app-alert-modal 
     [titulo]="modalConfig.titulo"
     [mensagem]="modalConfig.mensagem"
     [tipo]="modalConfig.tipo"
     (fechar)="aoFecharModal()">
-  </app-modal>
+  </app-alert-modal>
 }
