@@ -121,3 +121,11 @@
   </div>
   }
 }
+@if (mostrarAlert) {
+  <app-alert-modal 
+    [titulo]="alertConfig.titulo"
+    [mensagem]="alertConfig.mensagem"
+    [tipo]="alertConfig.tipo"
+    (fechar)="fecharAlert()">
+  </app-alert-modal>
+}
