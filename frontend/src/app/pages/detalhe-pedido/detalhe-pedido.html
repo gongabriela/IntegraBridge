@@ -1,0 +1,90 @@
+<div class="page-container">
+  
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">My Cases</a>
+    <span class="separator">></span>
+    <span class="current">Request #IB-{{ pedido.id.substring(0, 4) }}</span>
+  </nav>
+
+  <main class="detalhes-card">
+    
+    <header class="card-header">
+      <div class="header-content">
+        <h1 class="title">{{ pedido.titulo }}</h1>
+        <div class="meta-row">
+          <span class="status-badge" [class]="pedido.status">
+            {{ pedido.status === 'em_progresso' ? 'In Progress' : (pedido.status | titlecase) }}
+          </span>
+          <span class="date">📅 Submitted {{ pedido.created_at | date:'mediumDate' }}</span>
+        </div>
+      </div>
+      
+      <div class="assigned-block">
+        <div class="avatars">
+          <div class="avatar">👤</div>
+          <div class="avatar">👤</div>
+        </div>
+        <div class="assigned-text">
+          <strong>{{ ajudantesAtribuidos }}</strong><br>
+          assigned
+        </div>
+      </div>
+    </header>
+
+    <hr class="divider">
+
+    <div class="card-body">
+      
+      <section class="description-section">
+        <h3>📄 Request Description</h3>
+        <p class="description-text">{{ pedido.descricao }}</p>
+        
+        <div class="info-blocks">
+          <div class="info-box">
+            <span class="info-label">LANGUAGE</span>
+            <strong class="info-value">{{ pedido.idiomas.nome }}</strong>
+          </div>
+          <div class="info-box">
+            <span class="info-label">DISTRICT / LOCATION</span>
+            <strong class="info-value">{{ pedido.distritos.nome }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside class="metadata-panel">
+        <h4>Case Metadata</h4>
+        <div class="meta-item">
+          <span class="meta-label">Reference ID</span>
+          <span class="meta-value bold">#IB-{{ pedido.id.substring(0, 4) }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Urgency</span>
+          <span class="meta-value urgency" [class]="pedido.urgencia">{{ pedido.urgencia | titlecase }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Last Activity</span>
+          <span class="meta-value">2 hours ago</span>
+        </div>
+      </aside>
+
+    </div>
+
+    <hr class="divider">
+
+    <footer class="card-actions">
+      <div class="primary-actions">
+        <button class="btn-success">
+          ✔️ Mark as Completed
+        </button>
+        <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">
+          ✏️ Edit Request
+        </button>
+      </div>
+      
+      <button class="btn-danger">
+        🗑️ Delete Request
+      </button>
+    </footer>
+
+  </main>
+</div>
