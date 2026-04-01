@@ -52,3 +52,12 @@
         </div>
     </div>
 </div>
+
+@if (mostrarAlert) {
+  <app-alert-modal 
+    [titulo]="alertConfig.titulo"
+    [mensagem]="alertConfig.mensagem"
+    [tipo]="alertConfig.tipo"
+    (fechar)="aoFecharAlert()">
+</app-alert-modal>
+}

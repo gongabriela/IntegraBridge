@@ -83,3 +83,12 @@
 
     </form>
 </div>
+
+@if (mostrarModal) {
+  <app-alert-modal 
+    [titulo]="modalConfig.titulo"
+    [mensagem]="modalConfig.mensagem"
+    [tipo]="modalConfig.tipo"
+    (fechar)="aoFecharModal()">
+  </app-alert-modal>
+}

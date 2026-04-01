@@ -1,7 +1,9 @@
-// src/app/models/pedido.model.ts
-
 export type PedidoStatus = 'pendente' | 'em_progresso' | 'concluido';
 export type PedidoUrgencia = 'baixa' | 'media' | 'alta';
+
+// Listas fixas para dropdowns (podem ser usadas em qualquer componente)
+export const LISTA_STATUS: PedidoStatus[] = ['pendente', 'em_progresso', 'concluido'];
+export const LISTA_URGENCIA: PedidoUrgencia[] = ['baixa', 'media', 'alta'];
 
 export interface IDistrito {
   id: number;
@@ -39,6 +41,9 @@ export interface IPedido {
   status: PedidoStatus;
   urgencia: PedidoUrgencia;
   created_at: string;       
+  
+  distrito_id?: number;
+  idioma_id?: number;
   
   // Os objetos que vêm do JOIN da base de dados
   distritos: { nome: string };

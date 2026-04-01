@@ -8,10 +8,10 @@
   </div>
 
   <div class="sidebar-profile">
-    <div class="avatar">G</div>
+    <div class="avatar">{{ inicialAvatar }}</div>
     <div class="profile-info">
-      <span class="profile-name">Gabriela</span>
-      <span class="profile-email">admin&#64;integrabridge.pt</span>
+      <span class="profile-name">{{ nomeUtilizador }}</span>
+      <span class="profile-email">{{ emailUtilizador }}</span>
     </div>
   </div>
 
@@ -22,6 +22,6 @@
   </nav>
 
   <div class="sidebar-footer">
-    <button class="logout-btn" (click)="sair()">Sair da Conta</button>
+    <button class="logout-btn" (click)="logoutAction.emit()">Sair da Conta</button>
   </div>
 </aside>

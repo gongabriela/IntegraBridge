@@ -5,12 +5,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { forkJoin, finalize } from 'rxjs';
 
 import { PedidoService } from '../../services/pedido';
-import { IDistrito, IIdioma, PedidoStatus, PedidoUrgencia } from '../../models/pedido.model';
+import { IDistrito, IIdioma, PedidoStatus, PedidoUrgencia, LISTA_STATUS, LISTA_URGENCIA } from '../../models/pedido.model';
+import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
 @Component({
   selector: 'app-editar-pedido',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, AlertModalComponent],
   templateUrl: './editar-pedido.html',
   styleUrl: './editar-pedido.css'
 })
@@ -30,32 +31,31 @@ export class EditarPedidoComponent implements OnInit {
   // Listas para os Dropdowns
   idiomas: IIdioma[] = [];
   distritos: IDistrito[] = [];
-  opcoesStatus: PedidoStatus[] = ['pendente', 'em_progresso', 'concluido'];
-  opcoesUrgencia: PedidoUrgencia[] = ['baixa', 'media', 'alta'];
+  readonly opcoesStatus = LISTA_STATUS;
+  readonly opcoesUrgencia = LISTA_URGENCIA;
 
+  mostrarAlert = false;
+  alertConfig = { titulo: '', mensagem: '', tipo: 'sucesso' as 'sucesso' | 'erro', redirecionar: false };
   // Formulário Tipado
   pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
-    status: ['pendente' as PedidoStatus, [Validators.required]],
-    urgencia: ['media' as PedidoUrgencia, [Validators.required]],
+    status: [this.opcoesStatus[0], [Validators.required]],
+    urgencia: [this.opcoesUrgencia[1], [Validators.required]],
     distrito_id: [0, [Validators.required]],
     idioma_id: [0, [Validators.required]]
   });
 
   ngOnInit(): void {
     this.pedidoId = this.route.snapshot.paramMap.get('id') || '';
-    
     if (!this.pedidoId) {
       this.router.navigate(['/dashboard']);
       return;
     }
-
     this.carregarDados();
   }
 
   private carregarDados(): void {
-    // forkJoin faz os 3 pedidos HTTP ao mesmo tempo e espera que todos terminem!
     forkJoin({
       pedido: this.pedidoService.obterPorId(this.pedidoId),
       distritos: this.pedidoService.obterDistritos(),
@@ -69,10 +69,7 @@ export class EditarPedidoComponent implements OnInit {
       next: (dados) => {
         this.distritos = dados.distritos;
         this.idiomas = dados.idiomas;
-
-        // O Supabase devolve as foreign keys (distrito_id) além dos objetos populados.
-        // Fazemos cast para 'any' temporariamente para ler esses IDs de forma segura.
-        const p = dados.pedido as any; 
+        const p = dados.pedido; 
 
         // Preencher o formulário com os dados antigos
         this.pedidoForm.patchValue({
@@ -80,8 +77,8 @@ export class EditarPedidoComponent implements OnInit {
           descricao: p.descricao,
           status: p.status,
           urgencia: p.urgencia,
-          distrito_id: p.distrito_id,
-          idioma_id: p.idioma_id
+          distrito_id: p.distrito_id || 0,
+          idioma_id: p.idioma_id || 0
         });
       },
       error: (err) => {
@@ -96,32 +93,47 @@ export class EditarPedidoComponent implements OnInit {
       this.pedidoForm.markAllAsTouched();
       return;
     }
-
     this.salvando = true;
     const raw = this.pedidoForm.getRawValue();
-    
-    // Construir o pacote com os dados atualizados
     const payload = {
       titulo: raw.titulo,
       descricao: raw.descricao,
       status: raw.status as PedidoStatus,
       urgencia: raw.urgencia as PedidoUrgencia,
-      distrito_id: Number(raw.distrito_id),
-      idioma_id: Number(raw.idioma_id)
+      distrito_id: raw.distrito_id || 0,
+      idioma_id: raw.idioma_id || 0
     };
-
-    // Enviar o PUT para a API
-    this.pedidoService.atualizarPedido(this.pedidoId, payload)
+this.pedidoService.atualizarPedido(this.pedidoId, payload)
       .pipe(finalize(() => this.salvando = false))
       .subscribe({
         next: () => {
-          // Sucesso! Volta à página de detalhes para ver como ficou
-          this.router.navigate(['/pedido', this.pedidoId]);
+          this.alertConfig = {
+            titulo: 'Alterações Guardadas',
+            mensagem: 'O pedido foi atualizado com sucesso.',
+            tipo: 'sucesso',
+            redirecionar: true
+          };
+          this.mostrarAlert = true;
+          this.cdr.detectChanges();
         },
         error: (err) => {
-          console.error('Erro ao atualizar:', err);
-          alert('Ocorreu um erro ao guardar as alterações. Verifique as suas permissões.');
+          console.error('Erro ao guardar:', err);
+          this.alertConfig = {
+            titulo: 'Erro ao guardar',
+            mensagem: 'Não foi possível atualizar o pedido. Tente novamente mais tarde.',
+            tipo: 'erro',
+            redirecionar: false
+          };
+          this.mostrarAlert = true;
+          this.cdr.detectChanges();
         }
       });
+  }
+
+  aoFecharAlert(): void {
+    this.mostrarAlert = false;
+    if (this.alertConfig.redirecionar) {
+      this.router.navigate(['/pedido', this.pedidoId]);
+    }
   }
 }

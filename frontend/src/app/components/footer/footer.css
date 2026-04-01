@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 0;
-  margin-top: auto; /* APAGAR COMENTARIO Empurra o footer para o fundo */
+  margin-top: auto;
   border-top: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   font-size: 0.875rem;
@@ -23,7 +23,6 @@
   color: var(--action-primary);
 }
 
-/* APAGAR COMENTARIO No telemóvel, empilhamos o texto e os links */
 @media (max-width: 48rem) {
   .app-footer {
     flex-direction: column;

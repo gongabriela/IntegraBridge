@@ -17,9 +17,9 @@ export class PedidoService {
    * Segue o DRY (Don't Repeat Yourself).
    */
   private getAuthHeaders(): Observable<HttpHeaders> {
-    return from(this.authService.supabase.auth.getSession()).pipe(
-      map(({ data }) => {
-        const token = data.session?.access_token;
+    return from(this.authService.obterSessaoAtual()).pipe(
+      map((session) => {
+        const token = session?.access_token;
         if (!token) {
           console.warn('PedidoService: Nenhum token de sessão encontrado.');
         }

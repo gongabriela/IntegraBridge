@@ -1,16 +1,16 @@
 <div class="stats-grid">
     <div class="stat-banner blue-banner">
-        <span class="banner-subtitle">PRIORITY OPERATIONS</span>
-        <h2>12 Active Cases</h2>
+        <span class="banner-subtitle">OPERAÇÕES PRIORITÁRIAS</span>
+        <h2>12 Casos Ativos</h2>
 
         <div class="banner-sub-cards">
             <div class="sub-card">
                 <h3>04</h3>
-                <p>Urgent Review</p>
+                <p>Revisão Urgente</p>
             </div>
             <div class="sub-card">
                 <h3>08</h3>
-                <p>Processing</p>
+                <p>Em Processamento</p>
             </div>
         </div>
     </div>
@@ -23,36 +23,40 @@
                 <polyline points="9 12 11 14 15 10"></polyline>
             </svg>
         </div>
-        <h3>Institutional Trust</h3>
-        <p>98% Resolution Rate this quarter across all regions.</p>
+        <h3>Confiança Institucional</h3>
+        <p>Taxa de resolução de 98% este trimestre em todas as regiões.</p>
     </div>
-
 </div>
+
 <div class="requests-section">
     <div class="section-header">
-        <h3>Recent Requests</h3>
-        <button class="view-all">View All</button>
+        <h3>Pedidos Recentes</h3>
+        <button class="view-all">Ver Todos</button>
     </div>
 
-    <div class="requests-grid">
-        <div class="create-card" routerLink="/criar-pedido" style="cursor: pointer;">
-            <div class="plus-icon">
-                <svg>+</svg>
-            </div>
-            <h4>Create New Request</h4>
-            <p>Start a new assistance or document request</p>
-        </div>
-
-        @for (pedido of meusPedidos; track pedido.id) {
-
-        <app-card-pedido [dados]="pedido"></app-card-pedido>
-
-        } @empty {
-
-        <p style="color: var(--text-secondary); padding: 2rem;">
-            Ainda não tens nenhum pedido. Clica no botão ao lado para criar um!
+    @if (carregando) {
+        <p style="color: var(--text-secondary); padding: 2rem;">A carregar os teus pedidos...</p>
+    } @else if (erro) {
+        <p style="color: var(--status-error); padding: 2rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+            ⚠️ {{ erro }}
         </p>
+    } @else {
+        <div class="requests-grid">
+            <div class="create-card" routerLink="/criar-pedido">
+                <div class="plus-icon">
+                    <svg>+</svg>
+                </div>
+                <h4>Criar Novo Pedido</h4>
+                <p>Inicie um novo pedido de assistência ou documento</p>
+            </div>
 
-        }
-    </div>
+            @for (pedido of meusPedidos; track pedido.id) {
+                <app-card-pedido [dados]="pedido"></app-card-pedido>
+            } @empty {
+                <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
+                    Ainda não tens nenhum pedido ativo. Clica no botão ao lado para criar um!
+                </p>
+            }
+        </div>
+    }
 </div>

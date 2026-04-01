@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient, AuthResponse, User, AuthError } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, AuthResponse, User, AuthError, Session } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Login, Registrar } from '../models/auth.model'; 
 
@@ -7,7 +7,7 @@ import { Login, Registrar } from '../models/auth.model';
   providedIn: 'root'
 })
 export class AuthService {
-  public supabase: SupabaseClient;
+  private supabase: SupabaseClient;
 
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -40,4 +40,14 @@ export class AuthService {
     const { data } = await this.supabase.auth.getUser();
     return data?.user ?? null;
   }
+
+  async obterSessaoAtual(): Promise<Session | null> {
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) {
+      console.error('Erro ao recuperar sessão:', error.message);
+      throw error;
+    }
+    return data.session;
+  }
+
 }
