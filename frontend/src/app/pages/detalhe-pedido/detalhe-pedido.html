@@ -85,11 +85,29 @@
         <div class="primary-actions">
           
           @if (isDonoDoPedido) {
-            <button class="btn-success">✔️ Marcar como Concluído</button>
+            @if (pedido.status === 'em_progresso') {
+              <button class="btn-success" (click)="concluirPedido()" [disabled]="carregandoConcluir">
+                {{ carregandoConcluir ? '⏳ A processar...' : '✔️ Marcar como Concluído' }}
+              </button>
+            }
             <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">✏️ Editar Pedido</button>
           } @else {
-            <button class="btn-primary" style="background-color: var(--action-primary); color: white;">
-              🤝 Posso Ajudar
+            @if (pedido.status === 'pendente' && !isHelperDoPedido) {
+              <button 
+                class="btn-primary" 
+                style="background-color: var(--action-primary); color: white;"
+                (click)="oferecerMinhaAjuda()"
+                [disabled]="carregandoAjuda">
+                {{ carregandoAjuda ? '⏳ A processar...' : '🤝 Posso Ajudar' }}
+              </button>
+            }
+          }
+          @if ((pedido.status === 'em_progresso' || pedido.status === 'concluido') && (isDonoDoPedido || isHelperDoPedido)) {
+            <button 
+              class="btn-info" 
+              (click)="verContacto()"
+              [disabled]="carregandoContacto">
+              {{ carregandoContacto ? '⏳ A carregar...' : '📞 Ver Contacto' }}
             </button>
           }
         </div>
@@ -121,6 +139,37 @@
   </div>
   }
 }
+
+@if (mostrarModalContacto && contactoParceiro) {
+  <div class="modal-backdrop" (click)="fecharModalContacto()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="contact-icon">📞</span>
+        <h3>Contacto do {{ contactoParceiro.role === 'dono' ? 'Dono do Pedido' : 'Voluntário' }}</h3>
+      </div>
+
+      <div class="contact-info">
+        <div class="info-row">
+          <span class="info-label">👤 Nome:</span>
+          <span class="info-value">{{ contactoParceiro.nome }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">📧 Email:</span>
+          <span class="info-value">{{ contactoParceiro.email }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">📱 Telefone:</span>
+          <span class="info-value">{{ contactoParceiro.telefone }}</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-primary-solid" (click)="fecharModalContacto()">Fechar</button>
+      </div>
+    </div>
+  </div>
+}
+
 @if (mostrarAlert) {
   <app-alert-modal 
     [titulo]="alertConfig.titulo"

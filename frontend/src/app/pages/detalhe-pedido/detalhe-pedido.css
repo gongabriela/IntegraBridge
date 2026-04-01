@@ -392,3 +392,66 @@ button {
     justify-content: center;
   }
 }
+
+/* Modal de Contacto */
+.contact-icon {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+}
+
+.contact-info {
+  margin: 1.5rem 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.btn-primary-solid {
+  background-color: var(--action-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-info {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-info:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-info:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
