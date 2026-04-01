@@ -44,6 +44,7 @@ export interface IPedido {
   
   distrito_id?: number;
   idioma_id?: number;
+  helper_id?: string;
   
   // Os objetos que vêm do JOIN da base de dados
   distritos: { nome: string };
