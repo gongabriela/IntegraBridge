@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, from, switchMap, map, catchError, of } from 'rxjs';
 import { IContacto } from '../models/contacto.model';
+import { IPedido } from '../models/pedido.model';
 import { AuthService } from './auth';
 
 @Injectable({ providedIn: 'root' })
@@ -51,6 +52,63 @@ export class VoluntariadoService {
         console.error('VoluntariadoService: Erro ao obter contacto:', error.message);
         throw error;
       })
+    );
+  }
+
+  /**
+   * Oferece ajuda num pedido pendente.
+   * Ao executar, o utilizador atual torna-se o helper do pedido e o status muda para 'em_progresso'.
+   * 
+   * @param pedidoId UUID do pedido
+   * @returns Observable com o pedido atualizado (IPedido)
+   */
+  oferecerAjuda(pedidoId: string): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.post<IPedido>(`${this.apiUrl}/ajudar/${pedidoId}`, {}, { headers })
+      )
+    );
+  }
+
+  /**
+   * Obtém a lista de pedidos criados pelo utilizador atual (onde user_id = currentUser).
+   * 
+   * @returns Observable com array de pedidos do utilizador (IPedido[])
+   */
+  obterMeusPedidos(): Observable<IPedido[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.get<IPedido[]>(`${this.apiUrl}/meus-pedidos`, { headers })
+      )
+    );
+  }
+
+  /**
+   * Obtém a lista de pedidos onde o utilizador atual é helper (onde helper_id = currentUser).
+   * 
+   * @returns Observable com array de contribuições do utilizador (IPedido[])
+   */
+  obterMinhasContribuicoes(): Observable<IPedido[]> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.get<IPedido[]>(`${this.apiUrl}/minhas-contribuicoes`, { headers })
+      )
+    );
+  }
+
+  /**
+   * Marca um pedido como concluído.
+   * Apenas o dono do pedido (user_id) pode executar esta ação.
+   * O pedido deve estar em status 'em_progresso'.
+   * 
+   * @param pedidoId UUID do pedido
+   * @returns Observable com o pedido atualizado (IPedido)
+   */
+  marcarComoConcluido(pedidoId: string): Observable<IPedido> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.patch<IPedido>(`${this.apiUrl}/concluir/${pedidoId}`, {}, { headers })
+      )
     );
   }
 }
