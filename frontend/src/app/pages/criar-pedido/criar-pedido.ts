@@ -60,6 +60,7 @@ export class CriarPedido implements OnInit {
       next: (dados) => {
         this.idiomas = dados.idiomas;
         this.distritos = dados.distritos;
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Erro ao carregar lookups:', err)
     });
