@@ -85,11 +85,24 @@
         <div class="primary-actions">
           
           @if (isDonoDoPedido) {
-            @if (pedido.status === 'em_progresso') {
-              <button class="btn-success" (click)="concluirPedido()" [disabled]="carregandoConcluir">
+            <!-- Botão de Conclusão - Sempre visível para dono, muda baseado no status -->
+            @if (pedido.status === 'pendente') {
+              <button class="btn-success" disabled style="opacity: 0.5; cursor: not-allowed;">
+                ⏸️ Aguardando Voluntário
+              </button>
+            } @else if (pedido.status === 'em_progresso') {
+              <button 
+                class="btn-success" 
+                (click)="abrirModalConcluir()" 
+                [disabled]="carregandoConcluir">
                 {{ carregandoConcluir ? '⏳ A processar...' : '✔️ Marcar como Concluído' }}
               </button>
+            } @else if (pedido.status === 'concluido') {
+              <button class="btn-success" disabled style="opacity: 0.7; cursor: not-allowed;">
+                ✅ Concluído
+              </button>
             }
+            
             <button class="btn-outline" routerLink="/pedido/{{ pedido.id }}/editar">✏️ Editar Pedido</button>
           } @else {
             @if (pedido.status === 'pendente' && !isHelperDoPedido) {
@@ -102,6 +115,7 @@
               </button>
             }
           }
+
           @if ((pedido.status === 'em_progresso' || pedido.status === 'concluido') && (isDonoDoPedido || isHelperDoPedido)) {
             <button 
               class="btn-info" 
@@ -134,6 +148,24 @@
       <div class="modal-actions">
         <button class="btn-outline" (click)="fecharModalApagar()">Cancelar</button>
         <button class="btn-danger-solid" (click)="confirmarApagar()">Sim, Apagar</button>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (mostrarModalConcluir) {
+  <div class="modal-backdrop" (click)="fecharModalConcluir()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="warning-icon">✅</span>
+        <h3>Concluir Pedido</h3>
+      </div>
+
+      <p>Tens a certeza que desejas marcar o pedido <strong>"{{ pedido.titulo }}"</strong> como concluído?</p>
+
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="fecharModalConcluir()">Cancelar</button>
+        <button class="btn-success-solid" (click)="concluirPedido()">Sim, Concluir</button>
       </div>
     </div>
   </div>

@@ -30,6 +30,7 @@ export class DetalhePedidoComponent implements OnInit {
 
   ajudantesAtribuidos: number = 0;
   mostrarModalApagar: boolean = false;
+  mostrarModalConcluir: boolean = false;
   
   usuarioAtualId: string | null = null;
   isDonoDoPedido: boolean = false;
@@ -121,8 +122,12 @@ export class DetalhePedidoComponent implements OnInit {
       }))
       .subscribe({
         next: (pedidoAtualizado) => {
-          this.pedido = pedidoAtualizado;
+          if (this.pedido) {
+            this.pedido.status = pedidoAtualizado.status;
+            this.pedido.helper_id = pedidoAtualizado.helper_id;
+          }
           this.isHelperDoPedido = true;
+          
           this.alertConfig = {
             titulo: 'Sucesso!',
             mensagem: 'Ofereceste ajuda com sucesso! O dono do pedido foi notificado.',
@@ -143,17 +148,26 @@ export class DetalhePedidoComponent implements OnInit {
   }
 
   /**
+   * Abre o modal de confirmação para concluir pedido.
+   */
+  abrirModalConcluir(): void {
+    this.mostrarModalConcluir = true;
+  }
+
+  fecharModalConcluir(): void {
+    this.mostrarModalConcluir = false;
+  }
+
+  /**
    * Marca o pedido como concluído.
    * Apenas disponível para o dono ou helper quando pedido está em progresso.
    */
   concluirPedido(): void {
     if (!this.pedido || this.carregandoConcluir) return;
-    
-    if (!confirm('Tens a certeza que desejas marcar este pedido como concluído?')) {
-      return;
-    }
 
+    this.fecharModalConcluir();
     this.carregandoConcluir = true;
+    
     this.voluntariadoService.marcarComoConcluido(this.pedido.id)
       .pipe(finalize(() => {
         this.carregandoConcluir = false;
@@ -161,7 +175,11 @@ export class DetalhePedidoComponent implements OnInit {
       }))
       .subscribe({
         next: (pedidoAtualizado) => {
-          this.pedido = pedidoAtualizado;
+          if (this.pedido) {
+            this.pedido.status = pedidoAtualizado.status;
+            this.pedido.helper_id = pedidoAtualizado.helper_id;
+          }
+          
           this.alertConfig = {
             titulo: 'Pedido Concluído!',
             mensagem: 'O pedido foi marcado como concluído com sucesso.',
