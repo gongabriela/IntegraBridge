@@ -10,4 +10,6 @@ router.get('/minhas-contribuicoes', verificarToken, voluntariadoController.lista
 router.post('/ajudar/:id', verificarToken, voluntariadoController.oferecerAjuda);
 router.patch('/concluir/:id', verificarToken, voluntariadoController.marcarComoConcluido);
 
+router.get('/contacto/:pedidoId', verificarToken, voluntariadoController.obterContacto);
+
 module.exports = router;

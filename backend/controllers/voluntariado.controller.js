@@ -43,3 +43,25 @@ exports.marcarComoConcluido = async (req, res) => {
     res.status(400).json({ erro: erro.message });
   }
 };
+
+exports.obterContacto = async (req, res) => {
+  try {
+    const pedidoId = req.params.pedidoId;
+    const userId = req.user.id;
+    const authHeader = req.headers.authorization;
+
+    const contacto = await voluntariadoService.obterContacto(pedidoId, userId, authHeader);
+    res.json(contacto);
+  } catch (erro) {
+    // Mapear erros específicos para status HTTP apropriados
+    if (erro.message.includes('não encontrado')) {
+      return res.status(404).json({ erro: erro.message });
+    }
+    
+    if (erro.message.includes('Não autorizado') || erro.message.includes('Acesso negado')) {
+      return res.status(403).json({ erro: erro.message });
+    }
+
+    res.status(500).json({ erro: erro.message });
+  }
+};

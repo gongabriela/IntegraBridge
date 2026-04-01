@@ -71,3 +71,35 @@ exports.marcarComoConcluido = async (pedidoId, userId, authHeader) => {
   if (error) throw new Error('Erro ao atualizar o status do pedido na base de dados.');
   return data;
 };
+
+exports.obterContacto = async (pedidoId, callerId, authHeader) => {
+  const supabase = getAuthClient(authHeader);
+
+  const { data, error } = await supabase.rpc('obter_contacto_parceiro', {
+    p_pedido_id: pedidoId,
+    p_caller_id: callerId
+  });
+
+  if (error) {
+    // Mapear códigos de erro do Supabase para mensagens amigáveis
+    if (error.code === 'P0002') {
+      throw new Error('Pedido não encontrado.');
+    }
+
+    if (error.code === '42501') {
+      throw new Error('Não autorizado a visualizar contactos deste pedido. Apenas o dono e o helper podem aceder.');
+    }
+
+    if (error.code === 'P0003') {
+      throw new Error('Pedido ainda não tem helper atribuído.');
+    }
+
+    throw new Error(error.message || 'Erro ao obter contacto do parceiro.');
+  }
+
+  if (!data) {
+    throw new Error('Nenhum dado retornado pela RPC obter_contacto_parceiro.');
+  }
+
+  return data;
+};
