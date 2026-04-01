@@ -12,10 +12,11 @@ export interface IContacto {
 }
 
 /**
- * Interface para representar erros de contacto.
- * Usado quando o utilizador não tem permissão para ver contactos.
+ * Interface para representar erros de contacto
+ * Usado quando o utilizador não tem permissão para ver contactos
  */
 export interface IContactoError {
   erro: string;
   status?: number;
 }
+
