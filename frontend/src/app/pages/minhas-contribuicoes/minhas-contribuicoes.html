@@ -1,1 +1,26 @@
-<p>minhas-contribuicoes works!</p>
+<div class="requests-section">
+  <div class="section-header">
+    <h3>Minhas Contribuições como Voluntário</h3>
+  </div>
+
+  @if (carregando) {
+    <p style="color: var(--text-secondary); padding: 2rem;">A carregar as tuas contribuições...</p>
+  } @else if (erro) {
+    <p style="color: var(--status-error); padding: 2rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+      ⚠️ {{ erro }}
+    </p>
+  } @else {
+    <div class="requests-grid">
+      @for (pedido of minhasContribuicoes; track pedido.id) {
+        <app-card-pedido [dados]="pedido"></app-card-pedido>
+      } @empty {
+        <div class="empty-state">
+          <div class="empty-icon">🤝</div>
+          <h4>Ainda não ofereceste ajuda em nenhum pedido</h4>
+          <p>Vai ao Dashboard para explorar pedidos disponíveis e começar a ajudar!</p>
+          <button class="btn-primary" routerLink="/dashboard">Explorar Pedidos</button>
+        </div>
+      }
+    </div>
+  }
+</div>
