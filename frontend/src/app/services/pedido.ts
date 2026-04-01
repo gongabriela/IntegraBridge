@@ -9,9 +9,12 @@ export class PedidoService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
   
-  private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
-  private readonly lookupUrl = 'https://integrabridge-api.onrender.com/api/lookup';
+  // Em vez de /api/lookup, fica apenas /api
+  //private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/pedidos';
+  //private readonly baseUrl = 'https://integrabridge-api.onrender.com/api/lookups';
   
+  private readonly apiUrl = 'http://localhost:3000/api/pedidos';
+  private readonly lookupUrl = 'http://localhost:3000/api/lookups';
   /**
    * Método privado para centralizar a lógica de autenticação.
    * Segue o DRY (Don't Repeat Yourself).
