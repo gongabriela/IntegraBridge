@@ -189,10 +189,12 @@
           <span class="info-label">📧 Email:</span>
           <span class="info-value">{{ contactoParceiro.email }}</span>
         </div>
-        <div class="info-row">
-          <span class="info-label">📱 Telefone:</span>
-          <span class="info-value">{{ contactoParceiro.telefone }}</span>
-        </div>
+        @if (contactoParceiro.telefone) {
+          <div class="info-row">
+            <span class="info-label">📱 Telefone:</span>
+            <span class="info-value">{{ contactoParceiro.telefone }}</span>
+          </div>
+        }
       </div>
 
       <div class="modal-actions">

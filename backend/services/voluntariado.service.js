@@ -101,5 +101,5 @@ exports.obterContacto = async (pedidoId, callerId, authHeader) => {
     throw new Error('Nenhum dado retornado pela RPC obter_contacto_parceiro.');
   }
 
-  return data;
+  return data && data.length > 0 ? data[0] : null;
 };

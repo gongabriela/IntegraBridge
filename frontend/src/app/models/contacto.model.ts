@@ -7,7 +7,7 @@ export type ContactoRole = 'dono' | 'helper';
 export interface IContacto {
   nome: string;
   email: string;
-  telefone: string;
+  telefone?: string;
   role: ContactoRole;
 }
 
