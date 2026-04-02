@@ -111,9 +111,61 @@
   transform: scale(0.98);
 }
 
+/* =========================================
+  THEME TOGGLE SECTION
+========================================= */
+.theme-toggle-section {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: center;
+}
+
+.theme-toggle-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--action-primary);
+  background: var(--action-primary);
+  color: var(--action-text);
+  transform: scale(1.05);
+}
+
+.theme-icon {
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-btn .moon-icon {
+  display: none;
+}
+
+.theme-toggle-btn.dark-active .sun-icon {
+  display: none;
+}
+
+.theme-toggle-btn.dark-active .moon-icon {
+  display: flex;
+}
+
 .sidebar-backdrop {
   display: none;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--bg-overlay);
 }
 
 @media (max-width: 48rem) {
@@ -140,5 +192,6 @@
     width: 100vw;
     height: 100vh;
     z-index: 999;
+    pointer-events: auto;
   }
 }

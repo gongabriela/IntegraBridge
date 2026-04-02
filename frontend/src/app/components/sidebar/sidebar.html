@@ -21,6 +21,16 @@
     <a class="nav-item" routerLink="/minhas-contribuicoes" routerLinkActive="active">Minhas Contribuições</a>
   </nav>
 
+  <div class="theme-toggle-section">
+    <button class="theme-toggle-btn" 
+            (click)="toggleTheme()" 
+            [class.dark-active]="(currentTheme$ | async) === 'dark'"
+            title="Alternar tema claro/escuro">
+      <span class="theme-icon sun-icon">☀️</span>
+      <span class="theme-icon moon-icon">🌙</span>
+    </button>
+  </div>
+
   <div class="sidebar-footer">
     <button class="logout-btn" (click)="logoutAction.emit()">Sair da Conta</button>
   </div>
