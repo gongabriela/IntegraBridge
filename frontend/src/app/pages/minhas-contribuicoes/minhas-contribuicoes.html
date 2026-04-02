@@ -1,6 +1,15 @@
+<!-- ✨ NOVO: Componente de Filtros -->
+<app-pedidos-filter 
+  (filtrosAlterados)="aplicarFiltros($event)">
+</app-pedidos-filter>
+
 <div class="requests-section">
   <div class="section-header">
     <h3>Minhas Contribuições como Voluntário</h3>
+    <!-- ✨ NOVO: Contador de resultados -->
+    @if (!carregando && !erro) {
+      <span class="results-count">{{ pedidosFiltrados.length }} de {{ pedidosOriginais.length }}</span>
+    }
   </div>
 
   @if (carregando) {
@@ -11,15 +20,24 @@
     </p>
   } @else {
     <div class="requests-grid">
-      @for (pedido of minhasContribuicoes; track pedido.id) {
+      <!-- ✨ MODIFICADO: Usa pedidosFiltrados em vez de minhasContribuicoes -->
+      @for (pedido of pedidosFiltrados; track pedido.id) {
         <app-card-pedido [dados]="pedido"></app-card-pedido>
       } @empty {
-        <div class="empty-state">
-          <div class="empty-icon">🤝</div>
-          <h4>Ainda não ofereceste ajuda em nenhum pedido</h4>
-          <p>Vai ao Dashboard para explorar pedidos disponíveis e começar a ajudar!</p>
-          <button class="btn-primary" routerLink="/dashboard">Explorar Pedidos</button>
-        </div>
+        <!-- ✨ NOVO: Mensagem quando filtros não retornam resultados -->
+        @if (pedidosOriginais.length > 0) {
+          <p class="empty-filter-message">
+            🔍 Nenhuma contribuição encontrada com esses filtros. 
+            Tenta ajustar os critérios de pesquisa.
+          </p>
+        } @else {
+          <div class="empty-state">
+            <div class="empty-icon">🤝</div>
+            <h4>Ainda não ofereceste ajuda em nenhum pedido</h4>
+            <p>Vai ao Dashboard para explorar pedidos disponíveis e começar a ajudar!</p>
+            <button class="btn-primary" routerLink="/dashboard">Explorar Pedidos</button>
+          </div>
+        }
       }
     </div>
   }
