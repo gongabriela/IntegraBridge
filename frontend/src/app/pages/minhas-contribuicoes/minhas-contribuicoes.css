@@ -32,13 +32,19 @@
 
 .requests-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 🔧 FIX: 200px em vez de 300px */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
   gap: 1.5rem;
 }
 
-/* 🔧 FIX: Força custom elements a serem grid items corretos */
 .requests-grid > app-card-pedido {
   display: block;
+}
+
+/* Mobile: Reduz mínimo para caber em telas pequenas */
+@media (max-width: 48rem) { /* 768px */
+  .requests-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Mobile: aceita cartões menores */
+  }
 }
 
 /* ✨ NOVO: Mensagem quando os filtros não retornam resultados */
