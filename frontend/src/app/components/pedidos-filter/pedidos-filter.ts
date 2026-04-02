@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IFiltrosPedidos, IFiltroConfig } from '../../models/filter.model';
@@ -23,6 +23,7 @@ export class PedidosFilter implements OnInit {
   @Output() filtrosAlterados = new EventEmitter<IFiltrosPedidos>();
 
   private pedidoService = inject(PedidoService);
+  private cdr = inject(ChangeDetectorRef);
 
   distritos: IDistrito[] = [];
   idiomas: IIdioma[] = [];
@@ -46,6 +47,7 @@ export class PedidosFilter implements OnInit {
     this.pedidoService.obterDistritos().subscribe({
       next: (dados) => { 
         this.distritos = dados; 
+        this.cdr.detectChanges();
       },
       error: (erro) => {
         console.error('Erro ao carregar distritos:', erro);
@@ -57,6 +59,7 @@ export class PedidosFilter implements OnInit {
     this.pedidoService.obterIdiomas().subscribe({
       next: (dados) => { 
         this.idiomas = dados; 
+        this.cdr.detectChanges();
       },
       error: (erro) => {
         console.error('Erro ao carregar idiomas:', erro);
