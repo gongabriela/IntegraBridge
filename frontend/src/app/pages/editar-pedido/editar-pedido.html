@@ -44,15 +44,6 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="status">Estado Atual</label>
-          <select id="status" formControlName="status">
-            @for (status of opcoesStatus; track status) {
-              <option [value]="status">{{ status === 'em_progresso' ? 'Em Progresso' : (status | titlecase) }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="urgencia">Nível de Urgência</label>
           <select id="urgencia" formControlName="urgencia">
             @for (urg of opcoesUrgencia; track urg) {

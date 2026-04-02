@@ -28,8 +28,7 @@ export class CriarPedido implements OnInit {
   idiomas: IIdioma[] = [];
   distritos: IDistrito[] = [];
   
-  // ENUMs para os dropdowns fixos
-  readonly opcoesStatus = LISTA_STATUS;
+  // ENUM para o dropdown fixo de urgência
   readonly opcoesUrgencia = LISTA_URGENCIA;
 
   mostrarModal = false;
@@ -39,7 +38,6 @@ export class CriarPedido implements OnInit {
   readonly pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
-    status: [this.opcoesStatus[0], [Validators.required]],
     urgencia: [this.opcoesUrgencia[1], [Validators.required]],
     distrito_id: ['', [Validators.required]],
     idioma_id: ['', [Validators.required]]
@@ -106,13 +104,14 @@ export class CriarPedido implements OnInit {
   /**
    * Converte os valores do formulário para o formato exigido pelo Supabase.
    * Os IDs (distrito e idioma) são convertidos de String para Number.
+   * Status é sempre 'pendente' para novos pedidos.
    */
   private mapearParaDTO(): ICriarPedido {
     const raw = this.pedidoForm.getRawValue();
     return {
       titulo: raw.titulo,
       descricao: raw.descricao,
-      status: raw.status as PedidoStatus,
+      status: 'pendente' as PedidoStatus,
       urgencia: raw.urgencia as PedidoUrgencia,
       distrito_id: Number(raw.distrito_id),
       idioma_id: Number(raw.idioma_id)
