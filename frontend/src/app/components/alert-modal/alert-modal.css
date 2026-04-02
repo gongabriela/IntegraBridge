@@ -2,7 +2,7 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6); /* Ligeiramente mais escuro para contraste */
+  background: var(--bg-overlay); /* ✨ Usando variável CSS para tema */
   backdrop-filter: blur(4px); /* Desfoca o fundo da página */
   display: flex;
   align-items: center;
