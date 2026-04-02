@@ -19,12 +19,25 @@ export class Dashboard implements OnInit {
   private pedidoService = inject(PedidoService);
   private cdr = inject(ChangeDetectorRef);
   
-  // Estado da Página
   meusPedidos: IPedido[] = [];
-  pedidosOriginais: IPedido[] = [];    // ← NOVO: Lista original completa
-  pedidosFiltrados: IPedido[] = [];    // ← NOVO: Lista após aplicar filtros
+  pedidosOriginais: IPedido[] = [];
+  pedidosFiltrados: IPedido[] = [];
   carregando: boolean = true;
   erro: string = '';
+
+  get casosAtivos(): number {
+    return this.pedidosOriginais.filter(pedido => pedido.status !== 'concluido').length;
+  }
+
+  get revisoesUrgentes(): number {
+    return this.pedidosOriginais.filter(pedido => 
+      pedido.status === 'pendente' && pedido.urgencia === 'alta'
+    ).length;
+  }
+
+  get emProcessamento(): number {
+    return this.pedidosOriginais.filter(pedido => pedido.status === 'em_progresso').length;
+  }
 
   ngOnInit(): void {
     this.carregarPedidos();
@@ -33,7 +46,6 @@ export class Dashboard implements OnInit {
   private carregarPedidos(): void {
     this.pedidoService.obterPedidos()
       .pipe(
-        // O finalize corre sempre, quer haja sucesso ou erro
         finalize(() => {
           this.carregando = false;
           this.cdr.detectChanges(); 
@@ -42,8 +54,8 @@ export class Dashboard implements OnInit {
       .subscribe({
         next: (dados) => {
           this.meusPedidos = dados;
-          this.pedidosOriginais = dados;        // ← NOVO: Guarda original
-          this.pedidosFiltrados = dados;        // ← NOVO: Inicialmente todos visíveis
+          this.pedidosOriginais = dados;
+          this.pedidosFiltrados = dados;
         },
         error: (erro) => {
           console.error('Erro de API:', erro);
@@ -58,27 +70,23 @@ export class Dashboard implements OnInit {
    */
   aplicarFiltros(filtros: IFiltrosPedidos): void {
     this.pedidosFiltrados = this.pedidosOriginais.filter(pedido => {
-      // Filtro por distrito
       if (filtros.distrito_id !== null && pedido.distrito_id !== filtros.distrito_id) {
         return false;
       }
 
-      // Filtro por idioma
       if (filtros.idioma_id !== null && pedido.idioma_id !== filtros.idioma_id) {
         return false;
       }
 
-      // Filtro por urgência
       if (filtros.urgencia !== null && pedido.urgencia !== filtros.urgencia) {
         return false;
       }
 
-      // Filtro por status
       if (filtros.status !== null && pedido.status !== filtros.status) {
         return false;
       }
 
-      return true; // Pedido passou por todos os filtros
+      return true;
     });
   }
 }

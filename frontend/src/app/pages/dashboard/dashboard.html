@@ -1,15 +1,15 @@
 <div class="stats-grid">
     <div class="stat-banner blue-banner">
         <span class="banner-subtitle">OPERAÇÕES PRIORITÁRIAS</span>
-        <h2>12 Casos Ativos</h2>
+        <h2>{{ casosAtivos }} Casos Ativos</h2>
 
         <div class="banner-sub-cards">
             <div class="sub-card">
-                <h3>04</h3>
+                <h3>{{ revisoesUrgentes }}</h3>
                 <p>Revisão Urgente</p>
             </div>
             <div class="sub-card">
-                <h3>08</h3>
+                <h3>{{ emProcessamento }}</h3>
                 <p>Em Processamento</p>
             </div>
         </div>
@@ -28,7 +28,6 @@
     </div>
 </div>
 
-<!-- ✨ NOVO: Componente de Filtros -->
 <app-pedidos-filter 
   (filtrosAlterados)="aplicarFiltros($event)">
 </app-pedidos-filter>
@@ -36,7 +35,6 @@
 <div class="requests-section">
     <div class="section-header">
         <h3>Pedidos Recentes</h3>
-        <!-- ✨ NOVO: Contador de resultados -->
         @if (!carregando && !erro) {
           <span class="results-count">{{ pedidosFiltrados.length }} de {{ pedidosOriginais.length }}</span>
         }
@@ -58,11 +56,9 @@
                 <p>Inicie um novo pedido de assistência ou documento</p>
             </div>
 
-            <!-- ✨ MODIFICADO: Usa pedidosFiltrados em vez de meusPedidos -->
             @for (pedido of pedidosFiltrados; track pedido.id) {
                 <app-card-pedido [dados]="pedido"></app-card-pedido>
             } @empty {
-                <!-- ✨ NOVO: Mensagem quando filtros não retornam resultados -->
                 @if (pedidosOriginais.length > 0) {
                   <p class="empty-filter-message">
                     🔍 Nenhum pedido encontrado com esses filtros. 
