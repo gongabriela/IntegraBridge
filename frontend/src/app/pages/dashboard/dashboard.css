@@ -136,8 +136,13 @@
 
 .requests-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
+}
+
+/* 🔧 FIX: Força custom elements a serem grid items corretos */
+.requests-grid > app-card-pedido {
+  display: block;
 }
 
 /* --- Cartão de Criar Novo --- */
@@ -191,11 +196,52 @@
 }
 
 /* =========================================
-   RESPONSIVIDADE (MOBILE)
+   RESPONSIVIDADE
 ========================================= */
-@media (max-width: 48rem) {
 
+/* Tablet: Empilha banners de estatística (769px - 880px) */
+@media (max-width: 55rem) {
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr); /* ← FIX: Força grid a respeitar container */
+  }
+}
+
+/* Mobile: Reduz padding dos sub-cards e banners */
+@media (max-width: 48rem) {
+  .stat-banner {
+    padding: 1.5rem; /* Reduz padding de 2rem → 1.5rem */
+  }
+  
+  .blue-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .sub-card {
+    padding: 0.75rem 1rem;
+  }
+  
+  .sub-card h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Extra small: Reduz ainda mais o padding */
+@media (max-width: 25rem) { /* ~400px */
+  .stat-banner {
+    padding: 1rem; /* Padding menor para telas muito pequenas */
+  }
+  
+  .stats-grid {
+    gap: 1rem; /* Reduz gap de 1.5rem → 1rem */
+  }
+  
+  .blue-banner h2 {
+    font-size: 1.75rem;
+  }
+  
+  /* ✨ NOVO: Empilha os sub-cards em coluna */
+  .banner-sub-cards {
+    flex-direction: column;
   }
 }
