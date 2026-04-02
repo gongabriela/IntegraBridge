@@ -31,16 +31,18 @@ export class EditarPedidoComponent implements OnInit {
   // Listas para os Dropdowns
   idiomas: IIdioma[] = [];
   distritos: IDistrito[] = [];
-  readonly opcoesStatus = LISTA_STATUS;
   readonly opcoesUrgencia = LISTA_URGENCIA;
 
   mostrarAlert = false;
   alertConfig = { titulo: '', mensagem: '', tipo: 'sucesso' as 'sucesso' | 'erro', redirecionar: false };
+  
+  // Status original do pedido (para enviar no payload sem alterar)
+  statusOriginal: PedidoStatus = 'pendente';
+  
   // Formulário Tipado
   pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
-    status: [this.opcoesStatus[0], [Validators.required]],
     urgencia: [this.opcoesUrgencia[1], [Validators.required]],
     distrito_id: [0, [Validators.required]],
     idioma_id: [0, [Validators.required]]
@@ -70,12 +72,14 @@ export class EditarPedidoComponent implements OnInit {
         this.distritos = dados.distritos;
         this.idiomas = dados.idiomas;
         const p = dados.pedido; 
+        
+        // Guardar status original para manter no payload
+        this.statusOriginal = p.status;
 
-        // Preencher o formulário com os dados antigos
+        // Preencher o formulário com os dados antigos (sem status)
         this.pedidoForm.patchValue({
           titulo: p.titulo,
           descricao: p.descricao,
-          status: p.status,
           urgencia: p.urgencia,
           distrito_id: p.distrito_id || 0,
           idioma_id: p.idioma_id || 0
@@ -98,7 +102,7 @@ export class EditarPedidoComponent implements OnInit {
     const payload = {
       titulo: raw.titulo,
       descricao: raw.descricao,
-      status: raw.status as PedidoStatus,
+      status: this.statusOriginal,  // Mantém status original, não permite alterar
       urgencia: raw.urgencia as PedidoUrgencia,
       distrito_id: raw.distrito_id || 0,
       idioma_id: raw.idioma_id || 0

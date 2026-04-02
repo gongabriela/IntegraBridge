@@ -5,6 +5,8 @@ const cors = require('cors');
 const pedidoRoutes = require('./routes/pedido.routes');
 const lookupRoutes = require('./routes/lookup.routes');
 const authController = require('./controllers/auth.controller'); // Importa o novo controller
+const rotasPedido = require('./routes/pedido.routes');
+const rotasVoluntariado = require('./routes/voluntariado.routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,6 +24,8 @@ app.post('/api/login', authController.loginMock);
 // Rotas da API
 app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/lookups', lookupRoutes);
+app.use('/api/pedidos', rotasPedido);
+app.use('/api/voluntariado', rotasVoluntariado);
 
 app.listen(port, () => {
   console.log(`Servidor a correr na porta ${port}`);

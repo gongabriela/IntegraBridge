@@ -1,0 +1,32 @@
+<div class="requests-section">
+  <div class="section-header">
+    <h3>Meus Pedidos de Ajuda</h3>
+    <button class="view-all" routerLink="/criar-pedido">+ Criar Novo</button>
+  </div>
+
+  @if (carregando) {
+    <p style="color: var(--text-secondary); padding: 2rem;">A carregar os teus pedidos...</p>
+  } @else if (erro) {
+    <p style="color: var(--status-error); padding: 2rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+      ⚠️ {{ erro }}
+    </p>
+  } @else {
+    <div class="requests-grid">
+      <div class="create-card" routerLink="/criar-pedido">
+        <div class="plus-icon">
+          <svg>+</svg>
+        </div>
+        <h4>Criar Novo Pedido</h4>
+        <p>Inicie um novo pedido de assistência ou documento</p>
+      </div>
+
+      @for (pedido of meusPedidos; track pedido.id) {
+        <app-card-pedido [dados]="pedido"></app-card-pedido>
+      } @empty {
+        <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
+          Ainda não criaste nenhum pedido. Clica no botão acima para criar um!
+        </p>
+      }
+    </div>
+  }
+</div>

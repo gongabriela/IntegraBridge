@@ -151,3 +151,15 @@ button {
     width: 100%;
   }
 }
+
+/* Telas muito pequenas (smartphones) */
+@media (max-width: 25rem) {
+  .form-wrapper {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .form-actions {
+    gap: 0.75rem;
+  }
+}
