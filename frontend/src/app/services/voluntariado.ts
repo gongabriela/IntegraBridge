@@ -10,8 +10,8 @@ export class VoluntariadoService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
   
-  private readonly apiUrl = 'http://localhost:3000/api/voluntariado';
-
+  //private readonly apiUrl = 'http://localhost:3000/api/voluntariado';
+  private readonly apiUrl = 'https://integrabridge-api.onrender.com/api/voluntariado';
   /**
    * Método privado para centralizar a lógica de autenticação.
    * Segue o DRY (Don't Repeat Yourself).
