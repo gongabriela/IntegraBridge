@@ -113,6 +113,18 @@
   font-size: 1.25rem;
 }
 
+/* ✨ NOVO: Contador de resultados dos filtros */
+.results-count {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  letter-spacing: 0.02em;
+}
+
 .view-all {
   background: none;
   border: none;
@@ -124,8 +136,19 @@
 
 .requests-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Desktop: 3 colunas máx */
   gap: 1.5rem;
+}
+
+.requests-grid > app-card-pedido {
+  display: block;
+}
+
+/* Mobile: Reduz mínimo para caber em telas pequenas */
+@media (max-width: 48rem) { /* 768px */
+  .requests-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
 
 /* --- Cartão de Criar Novo --- */
@@ -165,12 +188,66 @@
   font-weight: 500;
 }
 
-/* =========================================
-   RESPONSIVIDADE (MOBILE)
-========================================= */
-@media (max-width: 48rem) {
+/* ✨ NOVO: Mensagem quando os filtros não retornam resultados */
+.empty-filter-message {
+  color: var(--text-secondary);
+  padding: 2rem;
+  grid-column: 1 / -1;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
 
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+/* Tablet: Empilha banners de estatística (769px - 880px) */
+@media (max-width: 55rem) {
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr); /* ← FIX: Força grid a respeitar container */
+  }
+}
+
+/* Mobile: Reduz padding dos sub-cards e banners */
+@media (max-width: 48rem) {
+  .stat-banner {
+    padding: 1.5rem; /* Reduz padding de 2rem → 1.5rem */
+  }
+  
+  .blue-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .sub-card {
+    padding: 0.75rem 1rem;
+  }
+  
+  .sub-card h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Extra small: Reduz ainda mais o padding */
+@media (max-width: 25rem) { /* ~400px */
+  .stat-banner {
+    padding: 1rem; /* Padding menor para telas muito pequenas */
+  }
+  
+  .stats-grid {
+    gap: 1rem; /* Reduz gap de 1.5rem → 1rem */
+  }
+  
+  .blue-banner h2 {
+    font-size: 1.75rem;
+  }
+  
+  /* ✨ NOVO: Empilha os sub-cards em coluna */
+  .banner-sub-cards {
+    flex-direction: column;
   }
 }

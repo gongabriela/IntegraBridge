@@ -19,8 +19,6 @@
 /* O espaço reservado para as páginas (Dashboard, Configurações, etc.) */
 .dashboard-body {
   flex-grow: 1; /* Garante que esta área estica e empurra o Footer para o fundo */
-  display: flex;
-  flex-direction: column;
 }
 
 /* Responsividade: Diminuir o padding no telemóvel */

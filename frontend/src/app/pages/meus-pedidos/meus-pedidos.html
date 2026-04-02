@@ -1,7 +1,15 @@
+<!-- ✨ NOVO: Componente de Filtros -->
+<app-pedidos-filter 
+  (filtrosAlterados)="aplicarFiltros($event)">
+</app-pedidos-filter>
+
 <div class="requests-section">
   <div class="section-header">
     <h3>Meus Pedidos de Ajuda</h3>
-    <button class="view-all" routerLink="/criar-pedido">+ Criar Novo</button>
+    <!-- ✨ NOVO: Contador de resultados -->
+    @if (!carregando && !erro) {
+      <span class="results-count">{{ pedidosFiltrados.length }} de {{ pedidosOriginais.length }}</span>
+    }
   </div>
 
   @if (carregando) {
@@ -20,12 +28,21 @@
         <p>Inicie um novo pedido de assistência ou documento</p>
       </div>
 
-      @for (pedido of meusPedidos; track pedido.id) {
+      <!-- ✨ MODIFICADO: Usa pedidosFiltrados em vez de meusPedidos -->
+      @for (pedido of pedidosFiltrados; track pedido.id) {
         <app-card-pedido [dados]="pedido"></app-card-pedido>
       } @empty {
-        <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
-          Ainda não criaste nenhum pedido. Clica no botão acima para criar um!
-        </p>
+        <!-- ✨ NOVO: Mensagem quando filtros não retornam resultados -->
+        @if (pedidosOriginais.length > 0) {
+          <p class="empty-filter-message">
+            🔍 Nenhum pedido encontrado com esses filtros. 
+            Tenta ajustar os critérios de pesquisa.
+          </p>
+        } @else {
+          <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
+            Ainda não criaste nenhum pedido. Clica no botão acima para criar um!
+          </p>
+        }
       }
     </div>
   }

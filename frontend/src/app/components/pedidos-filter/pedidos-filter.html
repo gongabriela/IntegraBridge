@@ -1,0 +1,77 @@
+<div class="filters-container">
+  <div class="filters-header">
+    <h3 class="filters-title">🔍 Filtrar Pedidos</h3>
+    <button 
+      class="btn-clear" 
+      (click)="limparFiltros()"
+      type="button">
+      Limpar
+    </button>
+  </div>
+
+  <div class="filters-grid">
+    @if (config.mostrarDistrito) {
+      <div class="filter-group">
+        <label for="distrito">Distrito</label>
+        <select 
+          id="distrito" 
+          [(ngModel)]="filtrosSelecionados.distrito_id"
+          (change)="aplicarFiltros()"
+          class="filter-select">
+          <option [ngValue]="null">Todos os distritos</option>
+          @for (distrito of distritos; track distrito.id) {
+            <option [ngValue]="distrito.id">{{ distrito.nome }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (config.mostrarIdioma) {
+      <div class="filter-group">
+        <label for="idioma">Idioma</label>
+        <select 
+          id="idioma" 
+          [(ngModel)]="filtrosSelecionados.idioma_id"
+          (change)="aplicarFiltros()"
+          class="filter-select">
+          <option [ngValue]="null">Todos os idiomas</option>
+          @for (idioma of idiomas; track idioma.id) {
+            <option [ngValue]="idioma.id">{{ idioma.nome }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (config.mostrarUrgencia) {
+      <div class="filter-group">
+        <label for="urgencia">Urgência</label>
+        <select 
+          id="urgencia" 
+          [(ngModel)]="filtrosSelecionados.urgencia"
+          (change)="aplicarFiltros()"
+          class="filter-select">
+          <option [ngValue]="null">Todas as urgências</option>
+          @for (urg of listaUrgencia; track urg) {
+            <option [ngValue]="urg">{{ urg }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (config.mostrarStatus) {
+      <div class="filter-group">
+        <label for="status">Status</label>
+        <select 
+          id="status" 
+          [(ngModel)]="filtrosSelecionados.status"
+          (change)="aplicarFiltros()"
+          class="filter-select">
+          <option [ngValue]="null">Todos os status</option>
+          @for (st of listaStatus; track st) {
+            <option [ngValue]="st">{{ st }}</option>
+          }
+        </select>
+      </div>
+    }
+  </div>
+</div>

@@ -18,6 +18,18 @@
   font-size: 1.25rem;
 }
 
+/* ✨ NOVO: Contador de resultados dos filtros */
+.results-count {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  letter-spacing: 0.02em;
+}
+
 .view-all {
   background: none;
   border: none;
@@ -29,8 +41,19 @@
 
 .requests-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Desktop: 3 colunas máx */
   gap: 1.5rem;
+}
+
+.requests-grid > app-card-pedido {
+  display: block;
+}
+
+/* Mobile: Reduz mínimo para caber em telas pequenas */
+@media (max-width: 48rem) { /* 768px */
+  .requests-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
 }
 
 /* --- Cartão de Criar Novo --- */
@@ -76,4 +99,17 @@
   font-size: 0.875rem;
   margin: 0;
   text-align: center;
+}
+
+/* ✨ NOVO: Mensagem quando os filtros não retornam resultados */
+.empty-filter-message {
+  color: var(--text-secondary);
+  padding: 2rem;
+  grid-column: 1 / -1;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
