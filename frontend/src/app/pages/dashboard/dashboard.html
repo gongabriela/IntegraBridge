@@ -28,10 +28,18 @@
     </div>
 </div>
 
+<!-- ✨ NOVO: Componente de Filtros -->
+<app-pedidos-filter 
+  (filtrosAlterados)="aplicarFiltros($event)">
+</app-pedidos-filter>
+
 <div class="requests-section">
     <div class="section-header">
         <h3>Pedidos Recentes</h3>
-        <button class="view-all">Ver Todos</button>
+        <!-- ✨ NOVO: Contador de resultados -->
+        @if (!carregando && !erro) {
+          <span class="results-count">{{ pedidosFiltrados.length }} de {{ pedidosOriginais.length }}</span>
+        }
     </div>
 
     @if (carregando) {
@@ -50,12 +58,21 @@
                 <p>Inicie um novo pedido de assistência ou documento</p>
             </div>
 
-            @for (pedido of meusPedidos; track pedido.id) {
+            <!-- ✨ MODIFICADO: Usa pedidosFiltrados em vez de meusPedidos -->
+            @for (pedido of pedidosFiltrados; track pedido.id) {
                 <app-card-pedido [dados]="pedido"></app-card-pedido>
             } @empty {
-                <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
+                <!-- ✨ NOVO: Mensagem quando filtros não retornam resultados -->
+                @if (pedidosOriginais.length > 0) {
+                  <p class="empty-filter-message">
+                    🔍 Nenhum pedido encontrado com esses filtros. 
+                    Tenta ajustar os critérios de pesquisa.
+                  </p>
+                } @else {
+                  <p style="color: var(--text-secondary); padding: 2rem; grid-column: 1 / -1;">
                     Ainda não tens nenhum pedido ativo. Clica no botão ao lado para criar um!
-                </p>
+                  </p>
+                }
             }
         </div>
     }
