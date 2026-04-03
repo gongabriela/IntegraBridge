@@ -136,11 +136,22 @@
   position: relative;
 }
 
-.theme-toggle-btn:hover {
+/* ✅ Hover só para dispositivos que suportam hover real (desktop) */
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle-btn:hover {
+    border-color: var(--action-primary);
+    background: var(--action-primary);
+    color: var(--action-text);
+    transform: scale(1.05);
+  }
+}
+
+/* ✅ Active para feedback visual em mobile e desktop */
+.theme-toggle-btn:active {
   border-color: var(--action-primary);
   background: var(--action-primary);
   color: var(--action-text);
-  transform: scale(1.05);
+  transform: scale(0.98);
 }
 
 .theme-icon {
