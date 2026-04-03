@@ -183,6 +183,21 @@
   font-size: 1.5rem;
 }
 
+.create-card h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0;
+}
+
+.create-card p {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
 .create-card span {
   color: var(--text-secondary);
   font-weight: 500;
