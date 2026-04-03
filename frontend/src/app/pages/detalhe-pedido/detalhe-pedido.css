@@ -77,38 +77,6 @@
   font-weight: 500;
 }
 
-/* Bloco Assigned (Canto superior direito) */
-.assigned-block {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.avatars {
-  display: flex;
-}
-
-.avatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: var(--text-primary);
-  color: var(--bg-surface);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: -0.75rem;
-  border: 2px solid var(--bg-surface);
-  font-size: 1.2rem;
-}
-.avatar:first-child { margin-left: 0; }
-
-.assigned-text {
-  font-size: 0.75rem;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-
 /* Estrutura de Grelha */
 .divider {
   border: 0;
@@ -119,6 +87,7 @@
 .card-body {
   display: flex;
   gap: 3rem;
+  flex-wrap: wrap;
 }
 
 /* Secção da Descrição (Lado Esquerdo) */
