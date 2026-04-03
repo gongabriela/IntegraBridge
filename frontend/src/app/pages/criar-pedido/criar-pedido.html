@@ -62,6 +62,10 @@
                     <option [value]="i.id">{{ i.nome }}</option>
                     }
                 </select>
+
+                @if (pedidoForm.get('idioma_id')?.invalid && pedidoForm.get('idioma_id')?.touched) {
+                <span class="error-msg">Selecione um idioma válido.</span>
+                }
             </div>
         </div>
 
