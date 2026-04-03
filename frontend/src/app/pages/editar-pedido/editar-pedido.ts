@@ -118,7 +118,7 @@ this.pedidoService.atualizarPedido(this.pedidoId, payload)
             redirecionar: true
           };
           this.mostrarAlert = true;
-          this.cdr.detectChanges();
+          setTimeout(() => this.cdr.detectChanges(), 0);
         },
         error: (err) => {
           console.error('Erro ao guardar:', err);
@@ -129,7 +129,7 @@ this.pedidoService.atualizarPedido(this.pedidoId, payload)
             redirecionar: false
           };
           this.mostrarAlert = true;
-          this.cdr.detectChanges();
+          setTimeout(() => this.cdr.detectChanges(), 0);
         }
       });
   }
