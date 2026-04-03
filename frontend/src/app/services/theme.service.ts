@@ -21,7 +21,9 @@ export class ThemeService {
    */
   toggleTheme(): void {
     const currentTheme = this.currentThemeSubject.value;
-    const newTheme: Theme = currentTheme === 'dark' ? 'light' : 'dark';
+    // Tratar 'auto' como 'light' para o toggle
+    const effectiveTheme = currentTheme === 'auto' ? 'light' : currentTheme;
+    const newTheme: Theme = effectiveTheme === 'dark' ? 'light' : 'dark';
     this.setTheme(newTheme);
   }
 
