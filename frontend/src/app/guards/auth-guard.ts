@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth';
  * Verifica se utilizador está autenticado antes de permitir acesso.
  * Redireciona para /login se não autenticado.
  */
-export const authGuard: CanActivateFn = async (route, state) => {
+export const authGuard: CanActivateFn = async () => {
 
   const authService = inject(AuthService);
   const router = inject(Router);

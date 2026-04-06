@@ -33,49 +33,49 @@ export class DetalhePedidoComponent implements OnInit {
   pedido: IPedido | null = null;
   
   /** Estado de carregamento inicial */
-  carregando: boolean = true;
+  carregando = true;
   
   /** Mensagem de erro ao carregar pedido */
-  erro: string = '';
+  erro = '';
 
   /** Número de ajudantes atribuídos ao pedido */
-  ajudantesAtribuidos: number = 0;
+  ajudantesAtribuidos = 0;
   
   /** Controla visibilidade da modal de confirmação de apagar */
-  mostrarModalApagar: boolean = false;
+  mostrarModalApagar = false;
   
   /** Controla visibilidade da modal de confirmação de concluir */
-  mostrarModalConcluir: boolean = false;
+  mostrarModalConcluir = false;
   
   /** ID do utilizador autenticado */
   usuarioAtualId: string | null = null;
   
   /** True se o user atual é o criador do pedido */
-  isDonoDoPedido: boolean = false;
+  isDonoDoPedido = false;
   
   /** True se o user atual é o helper atribuído */
-  isHelperDoPedido: boolean = false;
+  isHelperDoPedido = false;
 
   /** Controla visibilidade da modal de alerta */
   mostrarAlert = false;
   
   /** Configuração dinâmica da modal de alerta */
-  alertConfig = { titulo: '', mensagem: '', tipo: 'erro' as 'erro' };
+  alertConfig = { titulo: '', mensagem: '', tipo: 'erro' as const };
 
   /** Loading state do botão "Oferecer Ajuda" */
-  carregandoAjuda: boolean = false;
+  carregandoAjuda = false;
   
   /** Loading state do botão "Marcar Concluído" */
-  carregandoConcluir: boolean = false;
+  carregandoConcluir = false;
   
   /** Controla visibilidade da modal de contacto */
-  mostrarModalContacto: boolean = false;
+  mostrarModalContacto = false;
   
   /** Dados de contacto do parceiro (dono ou helper) */
   contactoParceiro: IContacto | null = null;
   
   /** Loading state do botão "Ver Contacto" */
-  carregandoContacto: boolean = false;
+  carregandoContacto = false;
 
   /**
    * Inicializa o componente obtendo o ID do pedido da rota.

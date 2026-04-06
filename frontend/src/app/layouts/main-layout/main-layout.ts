@@ -26,13 +26,13 @@ export class MainLayout implements OnInit {
   isSidebarOpen = false;
 
   /** Nome do utilizador autenticado */
-  nome: string = 'Carregando...';
+  nome = 'Carregando...';
   
   /** Email do utilizador autenticado */
-  email: string = '';
+  email = '';
   
   /** Inicial do nome para avatar */
-  inicial: string = '';
+  inicial = '';
 
   ngOnInit(): void {
     this.carregarDadosUtilizador();

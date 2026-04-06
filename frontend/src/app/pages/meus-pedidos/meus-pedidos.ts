@@ -33,10 +33,10 @@ export class MeusPedidosComponent implements OnInit {
   pedidosFiltrados: IPedido[] = [];
   
   /** Indica se dados estão carregando */
-  carregando: boolean = true;
+  carregando = true;
   
   /** Mensagem de erro caso carregamento falhe */
-  erro: string = '';
+  erro = '';
 
   ngOnInit(): void {
     this.carregarMeusPedidos();

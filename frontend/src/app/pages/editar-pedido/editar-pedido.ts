@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { forkJoin, finalize } from 'rxjs';
 
 import { PedidoService } from '../../services/pedido';
-import { IDistrito, IIdioma, PedidoStatus, PedidoUrgencia, LISTA_STATUS, LISTA_URGENCIA } from '../../models/pedido.model';
+import { IDistrito, IIdioma, PedidoStatus, PedidoUrgencia, LISTA_URGENCIA } from '../../models/pedido.model';
 import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
 /**
@@ -27,16 +27,16 @@ export class EditarPedidoComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   /** ID do pedido a editar (extraído da rota) */
-  pedidoId: string = '';
+  pedidoId = '';
   
   /** Indica se dados estão carregando */
-  carregando: boolean = true;
+  carregando = true;
   
   /** Indica se salvamento está em progresso */
-  salvando: boolean = false;
+  salvando = false;
   
   /** Mensagem de erro caso carregamento falhe */
-  erro: string = '';
+  erro = '';
 
   /** Lista de idiomas disponíveis */
   idiomas: IIdioma[] = [];

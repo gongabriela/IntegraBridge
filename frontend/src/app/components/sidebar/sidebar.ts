@@ -20,16 +20,16 @@ export class SidebarComponent {
   @Input() isOpen = false;
   
   /** Nome do utilizador autenticado */
-  @Input() nomeUtilizador: string = 'Carregando...';
+  @Input() nomeUtilizador = 'Carregando...';
   
   /** Email do utilizador autenticado */
-  @Input() emailUtilizador: string = '';
+  @Input() emailUtilizador = '';
   
   /** Inicial do nome para avatar */
-  @Input() inicialAvatar: string = '';
+  @Input() inicialAvatar = '';
 
   /** Evento emitido ao fechar sidebar (mobile) */
-  @Output() close = new EventEmitter<void>();
+  @Output() sidebarClose = new EventEmitter<void>();
   
   /** Evento emitido ao clicar em logout */
   @Output() logoutAction = new EventEmitter<void>();

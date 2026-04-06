@@ -1,5 +1,5 @@
 @if (isOpen) {
-  <div class="sidebar-backdrop" (click)="close.emit()"></div>
+  <div class="sidebar-backdrop" (click)="sidebarClose.emit()"></div>
 }
 
 <aside class="sidebar" [class.open]="isOpen">

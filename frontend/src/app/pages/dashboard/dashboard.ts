@@ -34,10 +34,10 @@ export class Dashboard implements OnInit {
   pedidosFiltrados: IPedido[] = [];
   
   /** Indica se está a carregar dados da API */
-  carregando: boolean = true;
+  carregando = true;
   
   /** Mensagem de erro a mostrar ao utilizador */
-  erro: string = '';
+  erro = '';
 
   /**
    * Calcula número de casos ativos (status !== 'concluido').
