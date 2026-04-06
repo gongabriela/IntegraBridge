@@ -4,11 +4,15 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { PedidoService } from '../../services/pedido';
 import { ICriarPedido, PedidoStatus, PedidoUrgencia, IDistrito, IIdioma, LISTA_STATUS, LISTA_URGENCIA} from '../../models/pedido.model';
 import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
+/**
+ * Componente para criar novos pedidos de ajuda.
+ * Usa Reactive Forms com validações e forkJoin para carregar lookups em paralelo.
+ * Mostra modal de sucesso/erro após submissão.
+ */
 @Component({
   selector: 'app-criar-pedido',
   standalone: true,
@@ -24,17 +28,28 @@ export class CriarPedido implements OnInit {
   private readonly router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
-  // Listas originais que vêm da Base de Dados
+  /** Lista de idiomas carregada da API para dropdown */
   idiomas: IIdioma[] = [];
+  
+  /** Lista de distritos carregada da API para dropdown */
   distritos: IDistrito[] = [];
   
-  // ENUM para o dropdown fixo de urgência
+  /** Opções de urgência (constante do model) */
   readonly opcoesUrgencia = LISTA_URGENCIA;
 
+  /** Controla visibilidade da modal de sucesso/erro */
   mostrarModal = false;
+  
+  /** Configuração da modal (titulo, mensagem, tipo, redirecionar) */
   modalConfig = { titulo: '', mensagem: '', tipo: 'sucesso' as 'sucesso' | 'erro', redirecionar: false };
 
-  // Formulário Tipado e Seguro
+  /** 
+   * Formulário reativo com validações.
+   * - titulo: min 5 caracteres
+   * - descricao: min 10 caracteres
+   * - urgencia: default 'media' (index 1)
+   * - distrito_id e idioma_id: required
+   */
   readonly pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
@@ -48,7 +63,8 @@ export class CriarPedido implements OnInit {
   }
 
   /**
-   * Preenche os dropdown menus com a lista de distritos e idiomas da API
+   * Carrega distritos e idiomas em paralelo usando forkJoin.
+   * Preenche arrays para os dropdowns do formulário.
    */
   private carregarDependencias(): void {
     forkJoin({
@@ -64,13 +80,17 @@ export class CriarPedido implements OnInit {
     });
   }
 
+  /**
+   * Processa submissão do formulário.
+   * Valida dados, chama service para criar pedido, e mostra modal de sucesso/erro.
+   * Redireciona para /dashboard após sucesso.
+   */
   onSubmit(): void {
     if (this.pedidoForm.invalid) {
       this.pedidoForm.markAllAsTouched();
       return;
     }
 
-    //passamos a responsabilidade de envio para o servico
     this.pedidoService.criarPedido(this.mapearParaDTO()).subscribe({
       next: () => {
         this.modalConfig = {
@@ -95,16 +115,22 @@ export class CriarPedido implements OnInit {
     });
   }
 
+  /**
+   * Callback ao fechar modal.
+   * Se redirecionar=true (sucesso), navega para /dashboard.
+   */
   aoFecharModal(): void {
     this.mostrarModal = false;
     if (this.modalConfig.redirecionar) {
       this.router.navigate(['/dashboard']);
     }
   }
+  
   /**
-   * Converte os valores do formulário para o formato exigido pelo Supabase.
-   * Os IDs (distrito e idioma) são convertidos de String para Number.
-   * Status é sempre 'pendente' para novos pedidos.
+   * Mapeia valores do formulário para DTO esperado pela API.
+   * Converte distrito_id e idioma_id de string para number.
+   * Define status como 'pendente' para novos pedidos.
+   * @returns Objeto ICriarPedido pronto para enviar ao backend
    */
   private mapearParaDTO(): ICriarPedido {
     const raw = this.pedidoForm.getRawValue();
