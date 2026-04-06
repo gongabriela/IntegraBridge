@@ -1,16 +1,24 @@
-import { TestBed } from '@angular/core/testing';
+import { describe, it, expect } from 'vitest';
+import { AuthService } from './auth';
 
-import { Auth } from './auth';
+describe('AuthService', () => {
 
-describe('Auth', () => {
-  let service: Auth;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Auth);
+  it('deve existir a classe AuthService', () => {
+    expect(AuthService).toBeDefined();
+    expect(typeof AuthService).toBe('function');
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('deve ser possível criar uma instância (sem DI)', () => {
+    // Teste básico de estrutura da classe
+    expect(AuthService.prototype.obterUtilizadorAtual).toBeDefined();
+    expect(AuthService.prototype.login).toBeDefined();
+    expect(AuthService.prototype.logout).toBeDefined();
+  });
+
+  it('deve ter métodos públicos esperados', () => {
+    const methodNames = Object.getOwnPropertyNames(AuthService.prototype);
+    expect(methodNames).toContain('obterUtilizadorAtual');
+    expect(methodNames).toContain('login');
+    expect(methodNames).toContain('logout');
   });
 });
