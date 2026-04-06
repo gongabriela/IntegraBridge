@@ -72,7 +72,7 @@
   font-weight: 500;
 }
 
-/* Estrutura de Grelha */
+
 .divider {
   border: 0;
   border-top: 1px solid var(--border-subtle);
@@ -85,7 +85,7 @@
   flex-wrap: wrap;
 }
 
-/* Secção da Descrição (Lado Esquerdo) */
+
 .description-section {
   flex: 2;
 }
@@ -98,13 +98,13 @@
 
 .description-text {
   color: var(--text-secondary);
-  white-space: pre-wrap; /* Mantém os parágrafos */
+  white-space: pre-wrap; 
   margin-bottom: 2.5rem;
   line-height: 1.7;
   font-size: 0.95rem;
 }
 
-/* Blocos de Informação (Lado a lado) */
+
 .info-blocks {
   display: flex;
   gap: 1rem;
@@ -134,7 +134,7 @@
   font-weight: 600;
 }
 
-/* Painel de Metadados (Lado Direito) */
+
 .metadata-panel {
   flex: 1;
   background-color: var(--bg-main);
@@ -164,7 +164,7 @@
 .urgency.media { color: var(--status-pending); font-weight: 700; }
 .urgency.baixa { color: var(--status-completed); font-weight: 700; }
 
-/* Botões do Rodapé */
+
 .card-actions {
   display: flex;
   justify-content: space-between;
@@ -206,28 +206,25 @@ button {
 .btn-danger {
   background-color: transparent;
   color: var(--status-error);
-  border: 1px solid transparent; /* Invisível por padrão para design clean */
+  border: 1px solid transparent; 
 }
 .btn-danger:hover {
   background-color: rgba(239, 68, 68, 0.05);
   border-color: var(--status-error);
 }
 
-/* =========================================
-   RESPONSIVIDADE (MOBILE)
-   ========================================= */
 @media (max-width: 48rem) {
-  /* 1. Recuperar espaço vital reduzindo o padding do cartão */
+  
   .detalhes-card {
     padding: 1.25rem;
   }
 
-  /* 2. Reduzir o tamanho da fonte do título principal */
+  
   .title {
     font-size: 1.5rem;
   }
 
-  /* 3. Permitir que o status e a data saltem de linha se necessário */
+  
   .meta-row {
     flex-wrap: wrap;
     gap: 0.75rem;
@@ -246,13 +243,13 @@ button {
     flex-direction: column;
   }
 
-  /* 4. Empilhar a Label e o Valor no Painel de Metadados para não quebrarem as palavras */
+  
   .meta-item {
     flex-direction: column;
     gap: 0.25rem;
   }
 
-  /* Botoes */
+  
   .card-actions {
     flex-direction: column;
     gap: 1rem;
@@ -269,21 +266,18 @@ button {
   }
 }
 
-/* =========================================
-   ESTILOS DA JANELA MODAL
-   ========================================= */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(15, 23, 42, 0.6); /* Cor escura transparente */
-  backdrop-filter: blur(4px); /* Efeito de desfoque moderno */
+  background-color: rgba(15, 23, 42, 0.6); 
+  backdrop-filter: blur(4px); 
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Fica por cima de TUDO no site */
+  z-index: 1000; 
   padding: 1.25rem;
 }
 
@@ -291,7 +285,7 @@ button {
   background-color: var(--bg-surface);
   border-radius: 1rem;
   padding: 2rem;
-  max-width: 28rem; /* ~448px */
+  max-width: 28rem; 
   width: 100%;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   animation: modalSlideIn 0.3s ease-out;
@@ -310,7 +304,7 @@ button {
 
 .modal-content h3 {
   font-size: 1.25rem;
-  color: var(--status-error); /* Vermelho para dar sensação de perigo */
+  color: var(--status-error); 
 }
 
 .modal-content p {
@@ -330,7 +324,7 @@ button {
   gap: 1rem;
 }
 
-/* O botão vermelho sólido para a confirmação final */
+
 .btn-danger-solid {
   background-color: var(--status-error);
   color: white;
@@ -340,13 +334,13 @@ button {
   filter: brightness(0.9);
 }
 
-/* Animação suave de entrada */
+
 @keyframes modalSlideIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsividade da Modal */
+
 @media (max-width: 48rem) {
   .modal-actions {
     flex-direction: column-reverse;
@@ -357,7 +351,7 @@ button {
   }
 }
 
-/* Modal de Contacto */
+
 .contact-icon {
   font-size: 2rem;
   margin-right: 0.5rem;
@@ -419,7 +413,7 @@ button {
   opacity: 0.6;
   cursor: not-allowed;
 }
-/* Botão Success Solid para Modal */
+
 .btn-success-solid {
   background-color: #10b981;
   color: white;
