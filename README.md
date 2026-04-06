@@ -1,6 +1,9 @@
 # 🌍 IntegraBridge
 
-[![CI](https://github.com/gongabriela/GestorDeTarefas/actions/workflows/ci.yml/badge.svg)](https://github.com/gongabriela/GestorDeTarefas/actions/workflows/ci.yml)
+[![CI Pipeline](https://github.com/gongabriela/IntegraBridge/actions/workflows/ci.yml/badge.svg)](https://github.com/gongabriela/IntegraBridge/actions/workflows/ci.yml)
+[![Frontend Deploy](https://img.shields.io/badge/frontend-deployed-success)](https://integrabridge.netlify.app)
+[![Backend API](https://img.shields.io/badge/backend-running-blue)](https://integrabridge-backend.onrender.com)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 **IntegraBridge** é uma plataforma web que conecta **imigrantes e refugiados** com **voluntários locais** para ajuda em processos burocráticos essenciais. A aplicação facilita a criação, gestão e conclusão de pedidos de ajuda, promovendo a integração social através de um sistema de matchmaking voluntário baseado em localização, idiomas e competências específicas.
 
@@ -72,7 +75,7 @@ cp .env.example .env
 # Edite .env com suas credenciais do Supabase
 
 # Inicie o servidor
-npm start
+node index.js
 # 🚀 Backend rodando em http://localhost:3000
 ```
 
@@ -80,6 +83,10 @@ npm start
 ```bash
 cd frontend
 npm install
+
+# Configure as variáveis de ambiente
+cp src/environments/environment.example.ts src/environments/environment.ts
+# Edite environment.ts com suas credenciais do Supabase
 
 # Inicie o cliente
 ng serve
