@@ -225,6 +225,6 @@ exports.listarTodos = async (authHeader) => {
 
 ## 👩‍💻 Autora
 
-**Gabriela Gonçalves de Oliveira** - [GitHub](https://github.com/gongabriela) | [LinkedIn](https://linkedin.com/in/gongabriela)
+**Gabriela Gonçalves de Oliveira**
 
 > Desenvolvido como projeto final do módulo de Laboratórios Práticos do **Programa UPskill ServiceNow 25/26**.
