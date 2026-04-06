@@ -21,9 +21,7 @@ O **IntegraBridge** contribui diretamente para o **ODS 10 - Reduzir as Desiguald
 
 ## 📱 Preview da Aplicação
 
-<video src="docs/assets/gif_readme.mp4" width="100%">
-  Seu navegador não suporta vídeos.
-</video>
+![Demo da Aplicação](./docs/assets/gif_readme.mp4)
 
 **🌐 URL de Produção:** 
 - **Frontend:** https://integra-bridge.vercel.app/
