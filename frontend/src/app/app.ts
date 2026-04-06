@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { ThemeService } from './services/theme.service';
@@ -9,11 +9,8 @@ import { ThemeService } from './services/theme.service';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('frontend');
   
   private themeService = inject(ThemeService);
-
-  ngOnInit(): void {
-  }
 }

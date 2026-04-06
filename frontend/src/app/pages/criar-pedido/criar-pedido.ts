@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PedidoService } from '../../services/pedido';
-import { ICriarPedido, PedidoStatus, PedidoUrgencia, IDistrito, IIdioma, LISTA_STATUS, LISTA_URGENCIA} from '../../models/pedido.model';
+import { ICriarPedido, PedidoStatus, PedidoUrgencia, IDistrito, IIdioma, LISTA_URGENCIA} from '../../models/pedido.model';
 import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
 /**

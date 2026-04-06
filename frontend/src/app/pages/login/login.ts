@@ -25,7 +25,7 @@ export class LoginComponent {
   private fb = inject(NonNullableFormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
-  isLoginMode: boolean = true;
+  isLoginMode = true;
   
   mostrarAlert = false;
 
