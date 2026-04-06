@@ -3,6 +3,16 @@ require('dotenv').config();
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+/**
+ * Middleware de autenticação para validar JWT token.
+ * Valida token do header Authorization com Supabase.
+ * Adiciona user ao request (req.user) se válido.
+ * Retorna 401 Unauthorized se token inválido ou ausente.
+ * 
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @param {NextFunction} next - Express next function
+ */
 const verificarToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {

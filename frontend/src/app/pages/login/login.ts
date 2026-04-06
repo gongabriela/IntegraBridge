@@ -7,6 +7,11 @@ import { AuthError } from '@supabase/supabase-js';
 import { Login, Registrar } from '../../models/auth.model'; 
 import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
+/**
+ * Componente de autenticação (Login/Registo).
+ * Alterna entre modos de login e registo.
+ * Integra com AuthService e AlertModalComponent.
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,7 +20,6 @@ import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
   styleUrl: './login.css'
 })
 export class LoginComponent {
-  // Injeção de Dependências Moderna
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(NonNullableFormBuilder);
@@ -23,17 +27,20 @@ export class LoginComponent {
 
   isLoginMode: boolean = true;
   
-  // Estado da Modal
   mostrarAlert = false;
+
   alertConfig = { titulo: '', mensagem: '', tipo: 'sucesso' as 'sucesso' | 'erro', acao: 'nenhuma' };
 
-  // Formulário Tipado e Seguro (NonNullable)
   authForm = this.fb.group({
     nome: [''],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
+  /**
+   * Alterna entre modo Login e Registo.
+   * Limpa formulário e ajusta validações do campo 'nome'.
+   */
   toggleMode(): void {
     this.isLoginMode = !this.isLoginMode;
     this.authForm.reset();
@@ -49,6 +56,10 @@ export class LoginComponent {
     }
   }
 
+  /**
+   * Processa submissão do formulário (login ou registo).
+   * Valida dados, chama AuthService, trata sucesso/erro com modais.
+   */
   async onSubmit(): Promise<void> {
     if (this.authForm.invalid) {
       this.authForm.markAllAsTouched();
@@ -56,8 +67,6 @@ export class LoginComponent {
     }
 
     try {
-      // Como usamos NonNullableFormBuilder, os valores nunca são nulos. 
-      // Não precisamos mais de fazer "?? ''"
       const formData = this.authForm.getRawValue();
 
       if (this.isLoginMode) {
@@ -85,15 +94,14 @@ export class LoginComponent {
           throw new Error('Este email já se encontra registado na plataforma.');
         }
         
-        // Modal de Sucesso de Registo
         this.alertConfig = {
           titulo: 'Conta Criada!',
           mensagem: 'A tua conta foi criada com sucesso. Verifica o teu email ou faz login para continuar.',
           tipo: 'sucesso',
-          acao: 'mudar-para-login' // Usamos isto para saber o que fazer ao fechar a modal
+          acao: 'mudar-para-login'
         };
         this.mostrarAlert = true;
-        this.cdr.detectChanges(); // Garantir que a mudança de estado é refletida imediatamente
+        this.cdr.detectChanges();
       }
     
     } catch (error: unknown) { 
@@ -101,7 +109,6 @@ export class LoginComponent {
       if (error instanceof Error) erroMsg = error.message;
       else if ((error as AuthError).message) erroMsg = (error as AuthError).message;
 
-      // Modal de Erro (Substitui os alerts)
       this.alertConfig = {
         titulo: 'Falha na Autenticação',
         mensagem: erroMsg,
@@ -113,10 +120,14 @@ export class LoginComponent {
     }
   }
 
+  /**
+   * Callback ao fechar modal.
+   * Se acao === 'mudar-para-login', alterna para modo login.
+   */
   aoFecharAlert(): void {
     this.mostrarAlert = false;
     if (this.alertConfig.acao === 'mudar-para-login') {
-      this.toggleMode(); // Muda automaticamente para o formulário de login após registo!
+      this.toggleMode();
     }
   }
 }
