@@ -64,7 +64,9 @@ jobs:
         run: npm ci
 
       - name: Criar environment.ts para o CI
-        run: echo "export const environment = { production: true, apiUrl: 'http://localhost:3000/api', supabaseUrl: 'https://fake-url.supabase.co', supabaseKey: 'fake-anon-key', appName: 'IntegraBridge', version: '1.0.0' };" > src/environments/environment.ts
+        run: |
+          mkdir -p src/environments
+          echo 'export const environment = { production: true, apiUrl: "http://localhost:3000/api", supabaseUrl: "https://fake-url.supabase.co", supabaseKey: "fake-anon-key", appName: "IntegraBridge", version: "1.0.0" };' > src/environments/environment.ts
 
       - name: Executar Lint
         run: npm run lint
