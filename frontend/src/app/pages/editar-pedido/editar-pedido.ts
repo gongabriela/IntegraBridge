@@ -8,6 +8,10 @@ import { PedidoService } from '../../services/pedido';
 import { IDistrito, IIdioma, PedidoStatus, PedidoUrgencia, LISTA_STATUS, LISTA_URGENCIA } from '../../models/pedido.model';
 import { AlertModalComponent } from '../../components/alert-modal/alert-modal';
 
+/**
+ * Componente para edição de pedidos de ajuda existentes.
+ * Carrega pedido por ID, preenche formulário e permite atualizar. Status não é editável.
+ */
 @Component({
   selector: 'app-editar-pedido',
   standalone: true,
@@ -22,24 +26,37 @@ export class EditarPedidoComponent implements OnInit {
   private pedidoService = inject(PedidoService);
   private cdr = inject(ChangeDetectorRef);
 
-  // Variáveis de Estado
+  /** ID do pedido a editar (extraído da rota) */
   pedidoId: string = '';
+  
+  /** Indica se dados estão carregando */
   carregando: boolean = true;
+  
+  /** Indica se salvamento está em progresso */
   salvando: boolean = false;
+  
+  /** Mensagem de erro caso carregamento falhe */
   erro: string = '';
 
-  // Listas para os Dropdowns
+  /** Lista de idiomas disponíveis */
   idiomas: IIdioma[] = [];
+  
+  /** Lista de distritos disponíveis */
   distritos: IDistrito[] = [];
+  
+  /** Opções de urgência (constante) */
   readonly opcoesUrgencia = LISTA_URGENCIA;
 
+  /** Controla exibição do modal de feedback */
   mostrarAlert = false;
+  
+  /** Configuração do alert modal */
   alertConfig = { titulo: '', mensagem: '', tipo: 'sucesso' as 'sucesso' | 'erro', redirecionar: false };
   
-  // Status original do pedido (para enviar no payload sem alterar)
+  /** Status original do pedido (não editável, mantido no update) */
   statusOriginal: PedidoStatus = 'pendente';
   
-  // Formulário Tipado
+  /** Formulário reativo de edição */
   pedidoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
@@ -57,6 +74,10 @@ export class EditarPedidoComponent implements OnInit {
     this.carregarDados();
   }
 
+  /**
+   * Carrega dados do pedido e dropdowns (distritos/idiomas) em paralelo usando forkJoin.
+   * Preenche formulário com valores atuais do pedido.
+   */
   private carregarDados(): void {
     forkJoin({
       pedido: this.pedidoService.obterPorId(this.pedidoId),
@@ -73,10 +94,8 @@ export class EditarPedidoComponent implements OnInit {
         this.idiomas = dados.idiomas;
         const p = dados.pedido; 
         
-        // Guardar status original para manter no payload
         this.statusOriginal = p.status;
 
-        // Preencher o formulário com os dados antigos (sem status)
         this.pedidoForm.patchValue({
           titulo: p.titulo,
           descricao: p.descricao,
@@ -92,6 +111,10 @@ export class EditarPedidoComponent implements OnInit {
     });
   }
 
+  /**
+   * Submete alterações do formulário.
+   * Mantém status original (não permite alteração). Mostra modal de sucesso/erro.
+   */
   onSubmit(): void {
     if (this.pedidoForm.invalid) {
       this.pedidoForm.markAllAsTouched();
@@ -102,12 +125,12 @@ export class EditarPedidoComponent implements OnInit {
     const payload = {
       titulo: raw.titulo,
       descricao: raw.descricao,
-      status: this.statusOriginal,  // Mantém status original, não permite alterar
+      status: this.statusOriginal,
       urgencia: raw.urgencia as PedidoUrgencia,
       distrito_id: raw.distrito_id || 0,
       idioma_id: raw.idioma_id || 0
     };
-this.pedidoService.atualizarPedido(this.pedidoId, payload)
+    this.pedidoService.atualizarPedido(this.pedidoId, payload)
       .pipe(finalize(() => this.salvando = false))
       .subscribe({
         next: () => {
@@ -134,6 +157,10 @@ this.pedidoService.atualizarPedido(this.pedidoId, payload)
       });
   }
 
+  /**
+   * Callback ao fechar modal.
+   * Se redirecionar: true, navega para página de detalhe do pedido.
+   */
   aoFecharAlert(): void {
     this.mostrarAlert = false;
     if (this.alertConfig.redirecionar) {

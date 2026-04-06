@@ -3,6 +3,10 @@ import { BehaviorSubject } from 'rxjs';
 
 export type Theme = 'light' | 'dark' | 'auto';
 
+/**
+ * Service para gestão de temas light/dark mode com persistência.
+ * Usa BehaviorSubject para reactive updates e localStorage para persistir preferência do user.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +14,7 @@ export class ThemeService {
   private readonly STORAGE_KEY = 'integra-bridge-theme';
   private currentThemeSubject = new BehaviorSubject<Theme>('auto');
   
+  /** Observable do tema atual para subscrição de componentes */
   currentTheme$ = this.currentThemeSubject.asObservable();
 
   constructor() {
@@ -18,17 +23,19 @@ export class ThemeService {
 
   /**
    * Alterna entre light e dark mode.
+   * Trata 'auto' como 'light' para o toggle (muda para dark).
    */
   toggleTheme(): void {
     const currentTheme = this.currentThemeSubject.value;
-    // Tratar 'auto' como 'light' para o toggle
     const effectiveTheme = currentTheme === 'auto' ? 'light' : currentTheme;
     const newTheme: Theme = effectiveTheme === 'dark' ? 'light' : 'dark';
     this.setTheme(newTheme);
   }
 
   /**
-   * Define o tema específico e aplica imediatamente.
+   * Define tema específico e aplica imediatamente.
+   * Atualiza BehaviorSubject, DOM e localStorage.
+   * @param theme - 'light', 'dark' ou 'auto'
    */
   setTheme(theme: Theme): void {
     this.currentThemeSubject.next(theme);
@@ -38,14 +45,15 @@ export class ThemeService {
 
   /**
    * Retorna o tema atual.
+   * @returns Tema ativo ('light', 'dark' ou 'auto')
    */
   getTheme(): Theme {
     return this.currentThemeSubject.value;
   }
 
   /**
-   * Inicializa o tema carregando do localStorage.
-   * Se não houver preferência salva, usa 'auto' (system preference).
+   * Inicializa tema carregando do localStorage.
+   * Se não houver preferência salva, usa 'auto' (system preference @media).
    */
   private initTheme(): void {
     const savedTheme = this.loadTheme();
@@ -54,10 +62,11 @@ export class ThemeService {
   }
 
   /**
-   * Aplica o tema manipulando classes do DOM.
-   * - 'light': adiciona .light-theme ao body
-   * - 'dark': adiciona .dark-theme ao body  
+   * Aplica tema manipulando classes do DOM body.
+   * - 'light': adiciona .light-theme ao body (força light)
+   * - 'dark': adiciona .dark-theme ao body (força dark)
    * - 'auto': remove classes (usa @media prefers-color-scheme)
+   * @param theme - Tema a aplicar
    */
   private applyTheme(theme: Theme): void {
     const body = document.body;
@@ -72,7 +81,9 @@ export class ThemeService {
   }
 
   /**
-   * Persiste o tema no localStorage.
+   * Persiste tema no localStorage.
+   * Try-catch para graceful degradation (modo privado, quota exceeded).
+   * @param theme - Tema a guardar
    */
   private saveTheme(theme: Theme): void {
     try {
@@ -83,8 +94,9 @@ export class ThemeService {
   }
 
   /**
-   * Carrega o tema do localStorage.
-   * Fallback para 'auto' se não existir ou for inválido.
+   * Carrega tema do localStorage.
+   * Valida que valor é 'light', 'dark' ou 'auto'. Fallback para 'auto' se inválido.
+   * @returns Tema guardado ou 'auto' como fallback
    */
   private loadTheme(): Theme {
     try {

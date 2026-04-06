@@ -8,6 +8,10 @@ import { IPedido } from '../../models/pedido.model';
 import { IFiltrosPedidos } from '../../models/filter.model';
 import { VoluntariadoService } from '../../services/voluntariado';
 
+/**
+ * Componente "Meus Pedidos" - mostra pedidos criados pelo utilizador autenticado.
+ * Integra filtros reutilizáveis e cards de pedidos. Filtragem client-side.
+ */
 @Component({
   selector: 'app-meus-pedidos',
   standalone: true,
@@ -19,17 +23,29 @@ export class MeusPedidosComponent implements OnInit {
   private voluntariadoService = inject(VoluntariadoService);
   private cdr = inject(ChangeDetectorRef);
   
-  // Estado da Página
+  /** Pedidos do utilizador (não filtrados) */
   meusPedidos: IPedido[] = [];
-  pedidosOriginais: IPedido[] = [];    // ← NOVO: Lista original completa
-  pedidosFiltrados: IPedido[] = [];    // ← NOVO: Lista após aplicar filtros
+  
+  /** Lista original completa (backup para filtros) */
+  pedidosOriginais: IPedido[] = [];
+  
+  /** Lista após aplicar filtros (exibida no template) */
+  pedidosFiltrados: IPedido[] = [];
+  
+  /** Indica se dados estão carregando */
   carregando: boolean = true;
+  
+  /** Mensagem de erro caso carregamento falhe */
   erro: string = '';
 
   ngOnInit(): void {
     this.carregarMeusPedidos();
   }
 
+  /**
+   * Carrega pedidos do utilizador autenticado via VoluntariadoService.
+   * Inicializa arrays de originais e filtrados com mesmos dados.
+   */
   private carregarMeusPedidos(): void {
     this.voluntariadoService.obterMeusPedidos()
       .pipe(
@@ -41,8 +57,8 @@ export class MeusPedidosComponent implements OnInit {
       .subscribe({
         next: (dados) => {
           this.meusPedidos = dados;
-          this.pedidosOriginais = dados;        // ← NOVO: Guarda original
-          this.pedidosFiltrados = dados;        // ← NOVO: Inicialmente todos visíveis
+          this.pedidosOriginais = dados;
+          this.pedidosFiltrados = dados;
         },
         error: (erro) => {
           console.error('Erro ao carregar meus pedidos:', erro);
@@ -52,32 +68,29 @@ export class MeusPedidosComponent implements OnInit {
   }
 
   /**
-   * Método chamado quando o componente de filtros emite evento.
-   * Aplica filtros acumulativos (AND logic).
+   * Aplica filtros aos pedidos usando lógica AND (acumulativa).
+   * Filtra client-side a partir de pedidosOriginais. Valores null indicam "não filtrar".
+   * @param filtros - Objeto com distrito_id, idioma_id, urgencia, status
    */
   aplicarFiltros(filtros: IFiltrosPedidos): void {
     this.pedidosFiltrados = this.pedidosOriginais.filter(pedido => {
-      // Filtro por distrito
       if (filtros.distrito_id !== null && pedido.distrito_id !== filtros.distrito_id) {
         return false;
       }
 
-      // Filtro por idioma
       if (filtros.idioma_id !== null && pedido.idioma_id !== filtros.idioma_id) {
         return false;
       }
 
-      // Filtro por urgência
       if (filtros.urgencia !== null && pedido.urgencia !== filtros.urgencia) {
         return false;
       }
 
-      // Filtro por status
       if (filtros.status !== null && pedido.status !== filtros.status) {
         return false;
       }
 
-      return true; // Pedido passou por todos os filtros
+      return true;
     });
   }
 }
