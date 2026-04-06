@@ -4,6 +4,10 @@ import { AsyncPipe } from '@angular/common';
 
 import { ThemeService } from '../../services/theme.service';
 
+/**
+ * Componente de navegação lateral (sidebar).
+ * Contém menu de navegação, perfil de utilizador e toggle de tema.
+ */
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -12,22 +16,32 @@ import { ThemeService } from '../../services/theme.service';
   styleUrl: './sidebar.css'
 })
 export class SidebarComponent {
+  /** Controla se sidebar está visível (mobile) */
   @Input() isOpen = false;
   
+  /** Nome do utilizador autenticado */
   @Input() nomeUtilizador: string = 'Carregando...';
+  
+  /** Email do utilizador autenticado */
   @Input() emailUtilizador: string = '';
+  
+  /** Inicial do nome para avatar */
   @Input() inicialAvatar: string = '';
 
+  /** Evento emitido ao fechar sidebar (mobile) */
   @Output() close = new EventEmitter<void>();
+  
+  /** Evento emitido ao clicar em logout */
   @Output() logoutAction = new EventEmitter<void>();
 
-  // ✨ NOVO: Integração com ThemeService (ESCALANDO funcionalidade)
   private themeService = inject(ThemeService);
+  
+  /** Observable do tema atual para exibir ícone correto */
   currentTheme$ = this.themeService.currentTheme$;
 
   /**
-   * Alterna entre light e dark mode.
-   * Segue Single Responsibility: apenas chama o service.
+   * Alterna entre light e dark mode chamando ThemeService.
+   * Segue Single Responsibility: delega lógica ao service.
    */
   toggleTheme(): void {
     this.themeService.toggleTheme();

@@ -1,3 +1,15 @@
+/**
+ * Rotas para gestão de pedidos de ajuda (CRUD completo).
+ * Todas as rotas exigem autenticação via middleware verificarToken.
+ * 
+ * Endpoints:
+ * - GET    /api/pedidos        → Lista todos os pedidos
+ * - GET    /api/pedidos/:id    → Obtém pedido específico
+ * - POST   /api/pedidos        → Cria novo pedido
+ * - PUT    /api/pedidos/:id    → Atualiza pedido (apenas dono)
+ * - DELETE /api/pedidos/:id    → Apaga pedido (apenas dono)
+ */
+
 const express = require('express');
 const router = express.Router();
 

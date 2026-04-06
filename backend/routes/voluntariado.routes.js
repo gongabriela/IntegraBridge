@@ -1,3 +1,15 @@
+/**
+ * Rotas para sistema de voluntariado (oferecer ajuda, concluir, ver contacto).
+ * Todas as rotas exigem autenticação via middleware verificarToken.
+ * 
+ * Endpoints:
+ * - GET    /api/voluntariado/meus-pedidos          → Listar pedidos criados pelo user
+ * - GET    /api/voluntariado/minhas-contribuicoes  → Listar pedidos onde user é helper
+ * - POST   /api/voluntariado/ajudar/:id            → Oferecer ajuda (pendente → em_progresso)
+ * - PATCH  /api/voluntariado/concluir/:id          → Marcar concluído (em_progresso → concluido)
+ * - GET    /api/voluntariado/contacto/:pedidoId    → Ver contacto do parceiro (dono/helper)
+ */
+
 const express = require('express');
 const router = express.Router();
 

@@ -74,7 +74,6 @@
         <div class="primary-actions">
           
           @if (isDonoDoPedido) {
-            <!-- Botão de Conclusão - Sempre visível para dono, muda baseado no status -->
             @if (pedido.status === 'pendente') {
               <button class="btn-success" disabled style="opacity: 0.5; cursor: not-allowed;">
                 ⏸️ Aguardando Voluntário

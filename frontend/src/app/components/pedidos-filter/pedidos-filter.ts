@@ -5,6 +5,10 @@ import { IFiltrosPedidos, IFiltroConfig } from '../../models/filter.model';
 import { IDistrito, IIdioma, LISTA_STATUS, LISTA_URGENCIA } from '../../models/pedido.model';
 import { PedidoService } from '../../services/pedido';
 
+/**
+ * Componente de filtros configuráveis para pedidos de ajuda.
+ * Permite filtrar por distrito, idioma, urgência e status. Config via @Input controla quais filtros mostrar.
+ */
 @Component({
   selector: 'app-pedidos-filter',
   standalone: true,
@@ -13,6 +17,7 @@ import { PedidoService } from '../../services/pedido';
   styleUrl: './pedidos-filter.css',
 })
 export class PedidosFilter implements OnInit {
+  /** Configuração de quais filtros mostrar (distrito, idioma, urgência, status) */
   @Input() config: IFiltroConfig = {
     mostrarDistrito: true,
     mostrarIdioma: true,
@@ -20,17 +25,25 @@ export class PedidosFilter implements OnInit {
     mostrarStatus: true
   };
 
+  /** Emite evento quando user aplica ou limpa filtros */
   @Output() filtrosAlterados = new EventEmitter<IFiltrosPedidos>();
 
   private pedidoService = inject(PedidoService);
   private cdr = inject(ChangeDetectorRef);
 
+  /** Lista de distritos carregada da BD */
   distritos: IDistrito[] = [];
+  
+  /** Lista de idiomas carregada da BD */
   idiomas: IIdioma[] = [];
   
+  /** Lista de status possíveis (constante) */
   listaStatus = LISTA_STATUS;
+  
+  /** Lista de urgências possíveis (constante) */
   listaUrgencia = LISTA_URGENCIA;
 
+  /** Estado atual dos filtros selecionados (null = não filtrar) */
   filtrosSelecionados: IFiltrosPedidos = {
     distrito_id: null,
     idioma_id: null,
@@ -43,6 +56,10 @@ export class PedidosFilter implements OnInit {
     this.carregarIdiomas();
   }
 
+  /**
+   * Carrega lista de distritos do backend para popular dropdown.
+   * Usa ChangeDetectorRef para forçar re-render após carregamento assíncrono.
+   */
   private carregarDistritos(): void {
     this.pedidoService.obterDistritos().subscribe({
       next: (dados) => { 
@@ -55,6 +72,10 @@ export class PedidosFilter implements OnInit {
     });
   }
 
+  /**
+   * Carrega lista de idiomas do backend para popular dropdown.
+   * Usa ChangeDetectorRef para forçar re-render após carregamento assíncrono.
+   */
   private carregarIdiomas(): void {
     this.pedidoService.obterIdiomas().subscribe({
       next: (dados) => { 
@@ -68,16 +89,16 @@ export class PedidosFilter implements OnInit {
   }
 
   /**
-   * Aplica os filtros selecionados.
-   * Emite um evento para o componente pai.
+   * Aplica filtros selecionados emitindo evento para componente pai.
+   * Parent component (Dashboard) responsável por filtrar dados.
    */
   aplicarFiltros(): void {
     this.filtrosAlterados.emit(this.filtrosSelecionados);
   }
 
   /**
-   * Limpa todos os filtros.
-   * Reseta para valores null e emite evento.
+   * Limpa todos os filtros resetando para null e emite evento.
+   * Permite parent component mostrar todos os pedidos novamente.
    */
   limparFiltros(): void {
     this.filtrosSelecionados = {

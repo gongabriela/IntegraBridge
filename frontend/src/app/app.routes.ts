@@ -9,6 +9,11 @@ import { EditarPedidoComponent } from './pages/editar-pedido/editar-pedido';
 import { MeusPedidosComponent } from './pages/meus-pedidos/meus-pedidos';
 import { MinhasContribuicoesComponent } from './pages/minhas-contribuicoes/minhas-contribuicoes';
 
+/**
+ * Configuração de rotas da aplicação Angular.
+ * - / e /login: páginas públicas (sem autenticação)
+ * - Rotas filhas: protegidas por authGuard e encapsuladas no MainLayout
+ */
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },

@@ -1,5 +1,5 @@
 .form-wrapper {
-  max-width: 48rem; /* ~768px */
+  max-width: 48rem;
   margin: 3rem auto;
   padding: 2.5rem;
   background-color: var(--bg-surface);
@@ -65,7 +65,6 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--action-primary);
 }
 
-/* Botões do Formulário */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -110,9 +109,6 @@ button {
   cursor: not-allowed;
 }
 
-/* =========================================
-   ESTADOS DE ERRO DO FORMULÁRIO
-   ========================================= */
 .input-error {
   border-color: var(--status-error) !important;
   background-color: rgba(239, 68, 68, 0.02) !important;
@@ -126,12 +122,12 @@ button {
   color: var(--status-error);
   font-size: 0.8rem;
   font-weight: 500;
-  margin-top: -0.25rem; /* Puxa a mensagem um pouco para perto do input */
+  margin-top: -0.25rem;
   display: flex;
   flex-direction: column;
 }
 
-/* Responsividade */
+
 @media (max-width: 48rem) {
   .form-wrapper {
     margin: 1rem;
@@ -152,7 +148,6 @@ button {
   }
 }
 
-/* Telas muito pequenas (smartphones) */
 @media (max-width: 25rem) {
   .form-wrapper {
     margin: 0.5rem;

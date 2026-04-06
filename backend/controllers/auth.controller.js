@@ -1,5 +1,13 @@
 const supabase = require('../config/supabase');
 
+/**
+ * Endpoint de login mock (LEGACY - não usado em produção).
+ * Frontend chama Supabase Auth diretamente, sem passar por este endpoint.
+ * Mantido para testes backend isolados.
+ * 
+ * @param {Request} req - Express request com {email, password} no body
+ * @param {Response} res - Express response com {token} ou {erro}
+ */
 exports.loginMock = async (req, res) => {
   try {
     const { email, password } = req.body;

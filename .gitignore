@@ -27,9 +27,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#environment
-
-environments/
+# Environment files (keep example files)
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.*.ts
+!frontend/src/environments/environment.example.ts
 
 # arquivos pessoais
 
@@ -39,5 +40,5 @@ initial-setup-guide.md
 update-delete-routes.md
 entrega-tp1.md
 entrega-TP1/
-docs/
-
+archive/
+test-ci.sh

@@ -1,5 +1,4 @@
 .request-card {
-  /* Usamos as variáveis globais para se adaptar ao claro/escuro */
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 1rem; /* 16px */
@@ -15,7 +14,6 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Cabeçalho (Badge e ID) --- */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -31,7 +29,6 @@
   background-color: var(--bg-main);
 }
 
-/* Cores dinâmicas para os Status (ligadas ao styles.css) */
 .status-badge.pendente {
   background-color: rgba(245, 158, 11, 0.15);
   color: var(--status-pending);
@@ -51,7 +48,6 @@
   font-weight: 500;
 }
 
-/* --- Corpo e Tipografia --- */
 .card-title {
   font-size: 1.125rem;
   color: var(--text-primary);
@@ -78,9 +74,8 @@
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
-  flex-grow: 1; /* Empurra o botão para o fundo */
+  flex-grow: 1;
   
-  /* Truque para cortar o texto com '...' se for muito grande (max 3 linhas) */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -88,7 +83,6 @@
   overflow: hidden;
 }
 
-/* --- Botão --- */
 .view-btn {
   width: 100%;
   padding: 0.75rem;
