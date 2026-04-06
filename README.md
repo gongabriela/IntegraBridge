@@ -39,7 +39,7 @@ O **IntegraBridge** contribui diretamente para o **ODS 10 - Reduzir as Desiguald
 | | TypeScript | ^5.0 | Type Safety |
 | | CSS Variables | - | Design System |
 | | RxJS | ^7.0 | Reactive Programming |
-| **Backend** | Node.js | ^20.0 | Runtime |
+| **Backend** | Node.js | ^24.0 | Runtime |
 | | Express.js | ^4.18 | Web Framework |
 | | Supabase Client | ^2.0 | BaaS SDK |
 | **Database** | PostgreSQL | 15 | Relational DB |
@@ -55,7 +55,7 @@ O **IntegraBridge** contribui diretamente para o **ODS 10 - Reduzir as Desiguald
 
 ### **Pré-requisitos**
 ```bash
-node >= 20.0.0
+node >= 24.0.0
 npm >= 10.0.0
 ```
 

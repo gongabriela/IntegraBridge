@@ -4,14 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "vitest",
-    "test:ci": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "lint": "ng lint"
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "echo 'Sem testes configurados ainda'",
+    "lint": "echo 'Lint não configurado para JavaScript'"
   },
   "keywords": [],
   "author": "",
